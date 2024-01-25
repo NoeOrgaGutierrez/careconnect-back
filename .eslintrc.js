@@ -7,7 +7,9 @@ module.exports = {
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
+    'eslint:recommended',
     'plugin:@typescript-eslint/strict-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
     'plugin:prettier/recommended',
   ],
   root: true,
@@ -17,6 +19,6 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-
+      "@typescript-eslint/explicit-function-return-type": "error"
   },
 };
