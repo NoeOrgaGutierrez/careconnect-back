@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { DatabaseService } from './database.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from 'src/users/entities/user.entity'
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -11,7 +10,7 @@ import { User } from 'src/users/entities/user.entity'
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [],
       ssl: true,
       extra: {
         ssl: {
