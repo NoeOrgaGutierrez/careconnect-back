@@ -6,16 +6,16 @@ import { User } from 'src/users/entities/user.entity'
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'postgresdb.cg6vma2ag6q6.us-east-1.rds.amazonaws.com',
-      port: 5432,
-      username: 'postgres',
-      password: '12344321',
-      database: 'CareConnect',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || 'port'),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User],
-      ssl: true, // Dejar SSL en true para habilitar la encriptación
+      ssl: true,
       extra: {
         ssl: {
-          rejectUnauthorized: false // Rechazar certificados no autorizados
+          rejectUnauthorized: false
         }
       },
       synchronize: true
