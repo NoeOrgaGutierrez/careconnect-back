@@ -1,0 +1,20 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "requestCert": true,
+          "rejectUnauthorized": false
+        }
+      },
+      "previewLimit": 50,
+      "server": "postgresdb.cg6vma2ag6q6.us-east-1.rds.amazonaws.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "AWS Postgre",
+      "database": "CareConnect",
+      "username": "postgres",
+      "password": "12344321"
+    }
+  ]
+}
