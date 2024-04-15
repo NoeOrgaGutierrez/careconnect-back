@@ -6,8 +6,8 @@ import { AssociationController } from './association.controller'
 
 @Module({
   imports: [DatabaseModule],
-  providers: [...AssociationProviders, AssociationService],
-  controllers: [AssociationController]
+  controllers: [AssociationController],
+  providers: [...AssociationProviders, AssociationService]
 })
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AssociationModule {}

@@ -11,7 +11,7 @@ import { AssociationService } from './association.service'
 import { CreateAssociationDto } from './dto/create-association.dto'
 import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
-import { UpdateResult } from 'typeorm'
+import { DeleteResult, UpdateResult } from 'typeorm'
 
 @Controller('association')
 export class AssociationController {
@@ -43,7 +43,7 @@ export class AssociationController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): number {
+  remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.associationService.remove(+id)
   }
 }

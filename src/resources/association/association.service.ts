@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { CreateAssociationDto } from './dto/create-association.dto'
 import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
-import { Repository, UpdateResult } from 'typeorm'
+import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 
 @Injectable()
 export class AssociationService {
@@ -10,9 +10,7 @@ export class AssociationService {
     @Inject('ASSOCIATION_REPOSITORY')
     private associationRepository: Repository<Association>
   ) {}
-  async create(
-    createAssociationDto: CreateAssociationDto
-  ): Promise<Association> {
+  create(createAssociationDto: CreateAssociationDto): Promise<Association> {
     const newAssociation: Association =
       this.associationRepository.create(createAssociationDto)
     return this.associationRepository.save(newAssociation)
@@ -32,7 +30,7 @@ export class AssociationService {
     return this.associationRepository.update(id, updateAssociationDto)
   }
 
-  remove(id: number): number {
-    return this.remove(id)
+  remove(id: number): Promise<DeleteResult> {
+    return this.associationRepository.delete(id)
   }
 }
