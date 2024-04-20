@@ -8,7 +8,7 @@ export class User {
   name: string
   @Column({ length: 40 })
   surname: string
-  @Column({ length: 50 })
+  @Column({ length: 50, unique: true })
   email: string
   @Column({ length: 15 })
   password: string
