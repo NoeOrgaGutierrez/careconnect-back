@@ -3,14 +3,17 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { User } from './entities/user.entity'
+import { hash } from 'bcrypt'
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('USER_REPOSITORY') private readonly userRepository: Repository<User>
+    @Inject('USER_REPOSITORY')
+    private readonly userRepository: Repository<User>
   ) {}
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser: User = this.userRepository.create(createUserDto)
+    newUser.password = await hash(newUser.password, 10)
     return this.userRepository.save(newUser)
   }
 

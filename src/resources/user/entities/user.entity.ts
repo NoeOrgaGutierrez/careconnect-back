@@ -10,6 +10,6 @@ export class User {
   surname: string
   @Column({ length: 50, unique: true })
   email: string
-  @Column({ length: 15 })
+  @Column({ length: 100 })
   password: string
 }
