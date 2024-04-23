@@ -8,6 +8,9 @@ import { AssociationModule } from './resources/association/association.module'
 import { UserModule } from './resources/user/user.module'
 import { EventModule } from './resources/event/event.module'
 import { DayModule } from './nmresources/user-event/user-event.module'
+import { CommentModule } from './resources/comment/comment.module'
+import { TopicModule } from './resources/topic/topic.module'
+import { PublicationModule } from './resources/publication/publication.module';
 
 @Module({
   imports: [
@@ -17,7 +20,10 @@ import { DayModule } from './nmresources/user-event/user-event.module'
     MemberEventModule,
     UserAssociationModule,
     EventModule,
-    DayModule
+    DayModule,
+    TopicModule,
+    CommentModule,
+    PublicationModule
   ],
   controllers: [AppController],
   providers: [AppService]
