@@ -7,6 +7,7 @@ import { UserAssociationModule } from './nmresources/user-association/user-assoc
 import { AssociationModule } from './resources/association/association.module'
 import { UserModule } from './resources/user/user.module'
 import { EventModule } from './resources/event/event.module'
+import { DayModule } from './nmresources/user-event/user-event.module'
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { EventModule } from './resources/event/event.module'
     UserModule,
     MemberEventModule,
     UserAssociationModule,
-    EventModule
+    EventModule,
+    DayModule
   ],
   controllers: [AppController],
   providers: [AppService]

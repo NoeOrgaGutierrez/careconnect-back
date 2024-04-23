@@ -11,26 +11,26 @@ import { EventService } from './event.service'
 import { CreateEventDto } from './dto/create-event.dto'
 import { UpdateEventDto } from './dto/update-event.dto'
 import { DeleteResult, UpdateResult } from 'typeorm'
-import { Event } from './entities/event.entity'
+import { Evento } from './entities/event.entity'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-@ApiTags('Event')
+@ApiTags('Evento')
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @ApiOperation({ summary: 'Create an event' })
   @Post()
-  create(@Body() createEventDto: CreateEventDto): Promise<Event> {
+  create(@Body() createEventDto: CreateEventDto): Promise<Evento> {
     return this.eventService.create(createEventDto)
   }
   @ApiOperation({ summary: 'Get all events' })
   @Get()
-  findAll(): Promise<Event[]> {
+  findAll(): Promise<Evento[]> {
     return this.eventService.findAll()
   }
   @ApiOperation({ summary: 'Get an event' })
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Event | null> {
+  findOne(@Param('id') id: string): Promise<Evento | null> {
     return this.eventService.findOne(+id)
   }
   @ApiOperation({ summary: 'Update an event' })
