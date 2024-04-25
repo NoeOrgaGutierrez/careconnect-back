@@ -10,7 +10,7 @@ import { EventModule } from './resources/event/event.module'
 import { DayModule } from './nmresources/user-event/user-event.module'
 import { CommentModule } from './resources/comment/comment.module'
 import { TopicModule } from './resources/topic/topic.module'
-import { PublicationModule } from './resources/publication/publication.module';
+import { PublicationModule } from './resources/publication/publication.module'
 
 @Module({
   imports: [
