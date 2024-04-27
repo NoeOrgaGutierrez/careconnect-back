@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { User } from './entities/user.entity'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,9 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser: User = this.userRepository.create(createUserDto)
+    const saltOrRounds = 10
+    newUser.password = await bcrypt.hash(newUser.password, saltOrRounds)
+    console.log(newUser.password)
     return this.userRepository.save(newUser)
   }
 
@@ -29,5 +33,20 @@ export class UserService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.userRepository.delete(id)
+  }
+  async login(user: User): Promise<User | null> {
+    const userInDb = await this.userRepository.findOne({
+      where: { email: user.email }
+    })
+    if (userInDb) {
+      const isPasswordMatching = await bcrypt.compare(
+        user.password,
+        userInDb.password
+      )
+      if (isPasswordMatching) {
+        return userInDb
+      }
+    }
+    return null
   }
 }

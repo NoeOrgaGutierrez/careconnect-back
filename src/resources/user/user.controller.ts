@@ -45,4 +45,9 @@ export class UserController {
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userService.remove(+id)
   }
+  @ApiOperation({ summary: 'Login an user' })
+  @Post('login')
+  login(@Body() user: User): Promise<User | null> {
+    return this.userService.login(user)
+  }
 }
