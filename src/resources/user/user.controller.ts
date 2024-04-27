@@ -13,6 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { LoginUserDto } from './dto/login-user.dto'
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -47,7 +48,7 @@ export class UserController {
   }
   @ApiOperation({ summary: 'Login an user' })
   @Post('login')
-  login(@Body() user: User): Promise<User | null> {
+  login(@Body() user: LoginUserDto): Promise<User | null> {
     return this.userService.login(user)
   }
 }

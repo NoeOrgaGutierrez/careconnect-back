@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
+import { LoginUserDto } from './dto/login-user.dto'
 
 @Injectable()
 export class UserService {
@@ -34,7 +35,7 @@ export class UserService {
   remove(id: number): Promise<DeleteResult> {
     return this.userRepository.delete(id)
   }
-  async login(user: User): Promise<User | null> {
+  async login(user: LoginUserDto): Promise<User | null> {
     const userInDb = await this.userRepository.findOne({
       where: { email: user.email }
     })
