@@ -14,11 +14,11 @@ export class UserEvent {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => Evento)
-  @JoinColumn({ name: 'eventId' })
-  eventId: number
+  @JoinColumn({ name: 'event' })
+  event: Evento
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  userId: number
+  @JoinColumn({ name: 'user' })
+  user: User
   @Column()
   initialHour: Date
   @Column()

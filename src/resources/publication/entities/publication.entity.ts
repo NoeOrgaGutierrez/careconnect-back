@@ -13,11 +13,11 @@ export class Publication {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => Topic)
-  @JoinColumn({ name: 'topicId' })
-  topicId: number
+  @JoinColumn({ name: 'topic' })
+  topic: Topic
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  userId: number
+  @JoinColumn({ name: 'user' })
+  user: User
   @Column()
   name: string
   @Column()

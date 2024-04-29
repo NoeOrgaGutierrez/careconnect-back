@@ -13,11 +13,11 @@ export class Comment {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => Publication)
-  @JoinColumn({ name: 'publicationId' })
-  publicationId: number
+  @JoinColumn({ name: 'publication' })
+  publication: Publication
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  userId: number
+  @JoinColumn({ name: 'user' })
+  user: User
   @Column()
   content: string
   @Column()

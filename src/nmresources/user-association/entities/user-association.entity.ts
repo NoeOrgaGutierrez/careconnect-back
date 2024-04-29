@@ -7,9 +7,9 @@ export class UserAssociation {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  userId: number
+  @JoinColumn({ name: 'user' })
+  user: User
   @ManyToOne(() => Association)
-  @JoinColumn({ name: 'associationId' })
-  associationId: number
+  @JoinColumn({ name: 'association' })
+  association: Association
 }

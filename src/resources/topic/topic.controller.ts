@@ -12,26 +12,27 @@ import { CreateTopicDto } from './dto/create-topic.dto'
 import { UpdateTopicDto } from './dto/update-topic.dto'
 import { Topic } from './entities/topic.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
-
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
+@ApiTags('Topic')
 @Controller('topic')
 export class TopicController {
   constructor(private readonly topicService: TopicService) {}
-
+  @ApiOperation({ summary: 'Create a topic' })
   @Post()
   create(@Body() createTopicDto: CreateTopicDto): Promise<Topic> {
     return this.topicService.create(createTopicDto)
   }
-
+  @ApiOperation({ summary: 'Get all topics' })
   @Get()
   findAll(): Promise<Topic[]> {
     return this.topicService.findAll()
   }
-
+  @ApiOperation({ summary: 'Get a topic' })
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Topic | null> {
     return this.topicService.findOne(+id)
   }
-
+  @ApiOperation({ summary: 'Update a topic' })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -39,7 +40,7 @@ export class TopicController {
   ): Promise<UpdateResult> {
     return this.topicService.update(+id, updateTopicDto)
   }
-
+  @ApiOperation({ summary: 'Delete a topic' })
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.topicService.remove(+id)

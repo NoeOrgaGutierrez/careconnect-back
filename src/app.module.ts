@@ -11,6 +11,10 @@ import { DayModule } from './nmresources/user-event/user-event.module'
 import { CommentModule } from './resources/comment/comment.module'
 import { TopicModule } from './resources/topic/topic.module'
 import { PublicationModule } from './resources/publication/publication.module'
+import { PermissionModule } from './resources/permission/permission.module'
+import { AssignmentModule } from './resources/assignment/assignment.module'
+import { MemberAssignmentModule } from './nmresources/member-assignment/member-assignment.module'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
   imports: [
@@ -23,7 +27,11 @@ import { PublicationModule } from './resources/publication/publication.module'
     DayModule,
     TopicModule,
     CommentModule,
-    PublicationModule
+    PublicationModule,
+    PermissionModule,
+    AssignmentModule,
+    MemberAssignmentModule,
+    ConfigModule.forRoot({})
   ],
   controllers: [AppController],
   providers: [AppService]

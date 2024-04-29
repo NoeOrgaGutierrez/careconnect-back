@@ -1,5 +1,8 @@
+import { Association } from 'src/resources/association/entities/association.entity'
+
 export class CreateEventDto {
-  hour: string
-  date: string
+  association: Association
+  dateStart: Date
+  dateEnd: Date
   description: string
 }

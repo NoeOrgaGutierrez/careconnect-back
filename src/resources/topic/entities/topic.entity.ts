@@ -11,8 +11,8 @@ export class Topic {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  userId: number
+  @JoinColumn({ name: 'user' })
+  user: User
   @Column()
   name: string
   @Column()
