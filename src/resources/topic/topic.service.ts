@@ -16,11 +16,36 @@ export class TopicService {
   }
 
   findAll(): Promise<Topic[]> {
-    return this.topicRepository.find()
+    return this.topicRepository.find({
+      relations: {
+        user: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        id: true,
+        name: true,
+        description: true
+      }
+    })
   }
 
   findOne(id: number): Promise<Topic | null> {
-    return this.topicRepository.findOne({ where: { id } })
+    return this.topicRepository.findOne({
+      where: { id },
+      relations: {
+        user: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        id: true,
+        name: true,
+        description: true
+      }
+    })
   }
 
   update(id: number, updateTopicDto: UpdateTopicDto): Promise<UpdateResult> {

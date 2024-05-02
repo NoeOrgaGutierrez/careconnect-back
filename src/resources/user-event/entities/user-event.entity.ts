@@ -13,10 +13,10 @@ import { Evento } from 'src/resources/event/entities/event.entity'
 export class UserEvent {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Evento)
+  @ManyToOne(() => Evento, (event) => event.id)
   @JoinColumn({ name: 'event' })
   event: Evento
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user' })
   user: User
   @Column()

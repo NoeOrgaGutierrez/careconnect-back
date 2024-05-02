@@ -17,11 +17,38 @@ export class UserEventService {
   }
 
   findAll(): Promise<UserEvent[]> {
-    return this.dayRepository.find()
+    return this.dayRepository.find({
+      relations: {
+        user: true,
+        event: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        event: {
+          id: true
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<UserEvent | null> {
-    return this.dayRepository.findOne({ where: { id } })
+    return this.dayRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        event: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        event: {
+          id: true
+        }
+      }
+    })
   }
 
   update(

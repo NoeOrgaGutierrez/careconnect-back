@@ -17,11 +17,62 @@ export class MemberEventService {
   }
 
   findAll(): Promise<MemberEvent[]> {
-    return this.memberEventRepository.find()
+    return this.memberEventRepository.find({
+      relations: {
+        evento: true,
+        userAssociation: true
+      },
+      select: {
+        evento: {
+          id: true,
+          association: {
+            id: true
+          },
+          description: true,
+          dateStart: true,
+          dateEnd: true
+        },
+        userAssociation: {
+          id: true,
+          association: {
+            id: true
+          },
+          user: {
+            id: true
+          }
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<MemberEvent | null> {
-    return this.memberEventRepository.findOne({ where: { id } })
+    return this.memberEventRepository.findOne({
+      where: { id },
+      relations: {
+        evento: true,
+        userAssociation: true
+      },
+      select: {
+        evento: {
+          id: true,
+          association: {
+            id: true
+          },
+          description: true,
+          dateStart: true,
+          dateEnd: true
+        },
+        userAssociation: {
+          id: true,
+          association: {
+            id: true
+          },
+          user: {
+            id: true
+          }
+        }
+      }
+    })
   }
 
   update(

@@ -16,7 +16,16 @@ export class EventService {
   }
 
   findAll(): Promise<Evento[]> {
-    return this.eventRepository.find()
+    return this.eventRepository.find({
+      relations: {
+        association: true
+      },
+      select: {
+        association: {
+          id: true
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<Evento | null> {

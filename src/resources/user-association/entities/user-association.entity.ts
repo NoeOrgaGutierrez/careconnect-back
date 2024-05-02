@@ -6,10 +6,10 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 export class UserAssociation {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user' })
   user: User
-  @ManyToOne(() => Association)
+  @ManyToOne(() => Association, (association) => association.id)
   @JoinColumn({ name: 'association' })
   association: Association
 }

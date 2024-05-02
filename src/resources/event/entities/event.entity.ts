@@ -11,7 +11,7 @@ import {
 export class Evento {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Association)
+  @ManyToOne(() => Association, (association) => association.id)
   @JoinColumn({ name: 'association' })
   association: Association
   @Column()

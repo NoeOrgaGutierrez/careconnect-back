@@ -17,11 +17,38 @@ export class PublicationService {
   }
 
   findAll(): Promise<Publication[]> {
-    return this.publicationRepository.find()
+    return this.publicationRepository.find({
+      relations: {
+        user: true,
+        topic: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        topic: {
+          id: true
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<Publication | null> {
-    return this.publicationRepository.findOne({ where: { id } })
+    return this.publicationRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        topic: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        topic: {
+          id: true
+        }
+      }
+    })
   }
 
   update(

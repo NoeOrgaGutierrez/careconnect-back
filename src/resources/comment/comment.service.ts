@@ -15,11 +15,38 @@ export class CommentService {
   }
 
   findAll(): Promise<Comment[]> {
-    return this.commentRepository.find()
+    return this.commentRepository.find({
+      relations: {
+        user: true,
+        publication: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        publication: {
+          id: true
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<Comment | null> {
-    return this.commentRepository.findOne({ where: { id } })
+    return this.commentRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        publication: true
+      },
+      select: {
+        user: {
+          id: true
+        },
+        publication: {
+          id: true
+        }
+      }
+    })
   }
 
   update(

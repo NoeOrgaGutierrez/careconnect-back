@@ -12,10 +12,10 @@ import {
 export class Publication {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Topic)
+  @ManyToOne(() => Topic, (topic) => topic.id)
   @JoinColumn({ name: 'topic' })
   topic: Topic
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user' })
   user: User
   @Column()

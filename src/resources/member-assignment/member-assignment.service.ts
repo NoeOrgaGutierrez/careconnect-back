@@ -20,11 +20,44 @@ export class MemberAssignmentService {
   }
 
   findAll(): Promise<MemberAssignment[]> {
-    return this.memberAssignmentRepository.find()
+    return this.memberAssignmentRepository.find({
+      relations: {
+        member: true,
+        assignment: true
+      },
+      select: {
+        member: {
+          id: true,
+          user: {
+            id: true
+          }
+        },
+        assignment: {
+          id: true
+        }
+      }
+    })
   }
 
   findOne(id: number): Promise<MemberAssignment | null> {
-    return this.memberAssignmentRepository.findOne({ where: { id } })
+    return this.memberAssignmentRepository.findOne({
+      where: { id },
+      relations: {
+        member: true,
+        assignment: true
+      },
+      select: {
+        member: {
+          id: true,
+          user: {
+            id: true
+          }
+        },
+        assignment: {
+          id: true
+        }
+      }
+    })
   }
 
   update(
