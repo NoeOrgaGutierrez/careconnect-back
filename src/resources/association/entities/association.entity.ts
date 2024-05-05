@@ -8,6 +8,12 @@ export class Association {
   @Column({ length: 50 })
   name: string
 
+  @Column({ length: 50, nullable: true })
+  loginCode: string
+
+  @Column({ length: 500, nullable: true })
+  password: string
+
   @Column({ length: 500, nullable: true })
   miniDescription: string
 

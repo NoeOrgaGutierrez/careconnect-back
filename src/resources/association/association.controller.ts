@@ -13,6 +13,7 @@ import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { LoginAssociationDto } from './dto/login-association.dto'
 @ApiTags('Association')
 @Controller('association')
 export class AssociationController {
@@ -46,5 +47,10 @@ export class AssociationController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.associationService.remove(+id)
+  }
+  @ApiOperation({ summary: 'Login an association' })
+  @Post('login')
+  login(@Body() association: LoginAssociationDto): Promise<Association | null> {
+    return this.associationService.login(association)
   }
 }

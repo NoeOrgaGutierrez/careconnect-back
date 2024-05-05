@@ -3,12 +3,14 @@ import { CreateAssociationDto } from './dto/create-association.dto'
 import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
+import { LoginAssociationDto } from './dto/login-association.dto'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class AssociationService {
   constructor(
     @Inject('ASSOCIATION_REPOSITORY')
-    private associationRepository: Repository<Association>
+    private readonly associationRepository: Repository<Association>
   ) {}
   create(createAssociationDto: CreateAssociationDto): Promise<Association> {
     const newAssociation: Association =
@@ -32,5 +34,20 @@ export class AssociationService {
 
   remove(id: number): Promise<DeleteResult> {
     return this.associationRepository.delete(id)
+  }
+  async login(association: LoginAssociationDto): Promise<Association | null> {
+    const associationInDb = await this.associationRepository.findOne({
+      where: { name: association.loginCode }
+    })
+    if (associationInDb) {
+      const isPasswordMatching = await bcrypt.compare(
+        association.password,
+        associationInDb.password
+      )
+      if (isPasswordMatching) {
+        return associationInDb
+      }
+    }
+    return null
   }
 }
