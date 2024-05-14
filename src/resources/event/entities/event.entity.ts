@@ -20,4 +20,6 @@ export class Evento {
   dateEnd: Date
   @Column({ length: 500 })
   description: string
+  @Column({ nullable: true, length: 1000 })
+  banner: string
 }
