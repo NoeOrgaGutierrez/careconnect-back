@@ -13,9 +13,8 @@ import { AssignmentModule } from './resources/assignment/assignment.module'
 import { ConfigModule } from '@nestjs/config'
 import { MemberEventModule } from './resources/member-event/member-event.module'
 import { UserAssociationModule } from './resources/user-association/user-association.module'
-import { DayModule } from './resources/user-event/user-event.module'
 import { MemberAssignmentModule } from './resources/member-assignment/member-assignment.module'
-import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module';
+import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module'
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { AssignmentPermissionModule } from './resources/assignment-permission/as
     MemberEventModule,
     UserAssociationModule,
     EventModule,
-    DayModule,
     TopicModule,
     CommentModule,
     PublicationModule,

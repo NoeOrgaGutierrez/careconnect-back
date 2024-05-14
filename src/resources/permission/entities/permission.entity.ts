@@ -4,6 +4,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 export class Permission {
   @PrimaryGeneratedColumn()
   id: number
-  @Column()
+  @Column({ length: 25 })
   name: string
 }
