@@ -1,5 +1,5 @@
 import { Assignment } from 'src/resources/assignment/entities/assignment.entity'
-import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
+import { Permission } from 'src/resources/permission/entities/permission.entity'
 import {
   Entity,
   Index,
@@ -9,14 +9,14 @@ import {
 } from 'typeorm'
 
 @Entity()
-@Index(['member', 'assignment'], { unique: true })
-export class MemberAssignment {
+@Index(['assignment', 'permission'], { unique: true })
+export class AssignmentPermission {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => UserAssociation, (member) => member.id)
-  @JoinColumn({ name: 'member' })
-  member: UserAssociation
   @ManyToOne(() => Assignment, (assignment) => assignment.id)
   @JoinColumn({ name: 'assignment' })
   assignment: Assignment
+  @ManyToOne(() => Permission, (permission) => permission.id)
+  @JoinColumn({ name: 'permission' })
+  permission: Permission
 }

@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common'
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -13,6 +18,12 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email }
+    })
+    if (existingUser) {
+      throw new ForbiddenException('Email already exists')
+    }
     const newUser: User = this.userRepository.create(createUserDto)
     const saltOrRounds = 10
     newUser.password = await bcrypt.hash(newUser.password, saltOrRounds)
@@ -24,8 +35,13 @@ export class UserService {
     return this.userRepository.find()
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } })
+  async findOne(id: number): Promise<User | null> {
+    const user = await this.userRepository.findOne({ where: { id } })
+    if (user) {
+      return user
+    } else {
+      throw new NotFoundException('User not found')
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
@@ -48,6 +64,6 @@ export class UserService {
         return userInDb
       }
     }
-    return null
+    throw new NotFoundException('User not found')
   }
 }

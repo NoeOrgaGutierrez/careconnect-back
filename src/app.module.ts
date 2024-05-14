@@ -15,6 +15,7 @@ import { MemberEventModule } from './resources/member-event/member-event.module'
 import { UserAssociationModule } from './resources/user-association/user-association.module'
 import { DayModule } from './resources/user-event/user-event.module'
 import { MemberAssignmentModule } from './resources/member-assignment/member-assignment.module'
+import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { MemberAssignmentModule } from './resources/member-assignment/member-ass
     PermissionModule,
     AssignmentModule,
     MemberAssignmentModule,
-    ConfigModule.forRoot({})
+    ConfigModule.forRoot({}),
+    AssignmentPermissionModule
   ],
   controllers: [AppController],
   providers: [AppService]
