@@ -4,6 +4,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 export class User {
   @PrimaryGeneratedColumn()
   id: number
+  @Column({ length: 1000, nullable: true })
+  avatar: string
+  @Column({ length: 100, nullable: true })
+  bio: string
   @Column({ length: 20 })
   name: string
   @Column({ length: 40 })

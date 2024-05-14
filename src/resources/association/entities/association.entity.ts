@@ -5,24 +5,24 @@ export class Association {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ length: 50 })
+  @Column({ length: 50, unique: true })
   name: string
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   loginCode: string
 
-  @Column({ length: 500, nullable: true })
+  @Column({ length: 25 })
   password: string
 
-  @Column({ length: 500, nullable: true })
+  @Column({ length: 500 })
   miniDescription: string
 
-  @Column({ length: 200, nullable: true })
+  @Column({ length: 200 })
   description: string
 
-  @Column({ length: 1000, nullable: true })
+  @Column({ length: 1000 })
   logo: string
 
-  @Column({ length: 1000, nullable: true })
+  @Column({ length: 1000 })
   banner: string
 }

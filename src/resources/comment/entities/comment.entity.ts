@@ -18,7 +18,7 @@ export class Comment {
   @ManyToOne(() => User, (user) => user.id)
   @JoinColumn({ name: 'user' })
   user: User
-  @Column()
+  @Column({ length: 500 })
   content: string
   @Column()
   created_at: Date

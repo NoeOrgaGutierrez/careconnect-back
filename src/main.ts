@@ -5,13 +5,14 @@ import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
+  app.enableCors()
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('CareConnect API Service')
     .setVersion('1.0')
     .addTag('CareConnect API')
     .build()
-    app.enableCors()
+
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
   app.useGlobalPipes(new ValidationPipe())

@@ -18,6 +18,6 @@ export class Evento {
   dateStart: Date
   @Column()
   dateEnd: Date
-  @Column()
+  @Column({ length: 500 })
   description: string
 }

@@ -53,6 +53,7 @@ export class CommentService {
     id: number,
     updateCommentDto: UpdateCommentDto
   ): Promise<UpdateResult> {
+    updateCommentDto.updated_at = new Date(Date.now())
     return this.commentRepository.update(id, updateCommentDto)
   }
 

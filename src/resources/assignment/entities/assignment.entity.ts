@@ -4,8 +4,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 export class Assignment {
   @PrimaryGeneratedColumn()
   id: number
-  @Column()
+  @Column({ length: 20, unique: true })
   name: string
-  @Column()
+  @Column({ length: 50 })
   description: string
 }
