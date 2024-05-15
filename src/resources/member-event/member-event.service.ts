@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateMemberEventDto } from './dto/create-member-event.dto'
 import { UpdateMemberEventDto } from './dto/update-member-event.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -16,13 +16,14 @@ export class MemberEventService {
     return this.memberEventRepository.save(newMemberEvent)
   }
 
-  findAll(): Promise<MemberEvent[]> {
-    return this.memberEventRepository.find({
+  async findAll(): Promise<MemberEvent[]> {
+    const memberEvents: MemberEvent[] = await this.memberEventRepository.find({
       relations: {
         evento: true,
         userAssociation: true
       },
       select: {
+        id: true,
         evento: {
           id: true,
           association: {
@@ -43,36 +44,46 @@ export class MemberEventService {
         }
       }
     })
+    if (memberEvents.length > 0) {
+      return memberEvents
+    }
+    throw new NotFoundException('MemberEvents not found')
   }
 
-  findOne(id: number): Promise<MemberEvent | null> {
-    return this.memberEventRepository.findOne({
-      where: { id },
-      relations: {
-        evento: true,
-        userAssociation: true
-      },
-      select: {
-        evento: {
-          id: true,
-          association: {
-            id: true
-          },
-          description: true,
-          dateStart: true,
-          dateEnd: true
+  async findOne(id: number): Promise<MemberEvent> {
+    const memberEvent: MemberEvent | null =
+      await this.memberEventRepository.findOne({
+        where: { id },
+        relations: {
+          evento: true,
+          userAssociation: true
         },
-        userAssociation: {
+        select: {
           id: true,
-          association: {
-            id: true
+          evento: {
+            id: true,
+            association: {
+              id: true
+            },
+            description: true,
+            dateStart: true,
+            dateEnd: true
           },
-          user: {
-            id: true
+          userAssociation: {
+            id: true,
+            association: {
+              id: true
+            },
+            user: {
+              id: true
+            }
           }
         }
-      }
-    })
+      })
+    if (memberEvent) {
+      return memberEvent
+    }
+    throw new NotFoundException('MemberEvent not found')
   }
 
   update(

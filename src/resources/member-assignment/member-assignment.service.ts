@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateMemberAssignmentDto } from './dto/create-member-assignment.dto'
 import { UpdateMemberAssignmentDto } from './dto/update-member-assignment.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -19,45 +19,57 @@ export class MemberAssignmentService {
     return this.memberAssignmentRepository.save(newMemberAssignment)
   }
 
-  findAll(): Promise<MemberAssignment[]> {
-    return this.memberAssignmentRepository.find({
-      relations: {
-        member: true,
-        assignment: true
-      },
-      select: {
-        member: {
+  async findAll(): Promise<MemberAssignment[]> {
+    const memberAssignments: MemberAssignment[] =
+      await this.memberAssignmentRepository.find({
+        relations: {
+          member: true,
+          assignment: true
+        },
+        select: {
           id: true,
-          user: {
+          member: {
+            id: true,
+            user: {
+              id: true
+            }
+          },
+          assignment: {
             id: true
           }
-        },
-        assignment: {
-          id: true
         }
-      }
-    })
+      })
+    if (memberAssignments.length > 0) {
+      return memberAssignments
+    }
+    throw new NotFoundException('Member Assignments not found')
   }
 
-  findOne(id: number): Promise<MemberAssignment | null> {
-    return this.memberAssignmentRepository.findOne({
-      where: { id },
-      relations: {
-        member: true,
-        assignment: true
-      },
-      select: {
-        member: {
+  async findOne(id: number): Promise<MemberAssignment> {
+    const memberAssignment: MemberAssignment | null =
+      await this.memberAssignmentRepository.findOne({
+        where: { id },
+        relations: {
+          member: true,
+          assignment: true
+        },
+        select: {
           id: true,
-          user: {
+          member: {
+            id: true,
+            user: {
+              id: true
+            }
+          },
+          assignment: {
             id: true
           }
-        },
-        assignment: {
-          id: true
         }
-      }
-    })
+      })
+    if (memberAssignment) {
+      return memberAssignment
+    }
+    throw new NotFoundException('Member Assignment not found')
   }
 
   update(

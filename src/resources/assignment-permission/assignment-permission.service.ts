@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateAssignmentPermissionDto } from './dto/create-assignment-permission.dto'
 import { UpdateAssignmentPermissionDto } from './dto/update-assignment-permission.dto'
 import { AssignmentPermission } from './entities/assignment-permission.entity'
@@ -19,12 +19,37 @@ export class AssignmentPermissionService {
     return this.assignmentPermissionRepository.save(newAssignmentPermission)
   }
 
-  findAll(): Promise<AssignmentPermission[]> {
-    return this.assignmentPermissionRepository.find()
+  async findAll(): Promise<AssignmentPermission[]> {
+    const assignmentPermissions: AssignmentPermission[] =
+      await this.assignmentPermissionRepository.find({
+        relations: { assignment: true, permission: true },
+        select: {
+          id: true,
+          assignment: { id: true, name: true },
+          permission: { id: true, name: true }
+        }
+      })
+    if (assignmentPermissions.length > 0) {
+      return assignmentPermissions
+    }
+    throw new NotFoundException('Permissions not found')
   }
 
-  findOne(id: number): Promise<AssignmentPermission | null> {
-    return this.assignmentPermissionRepository.findOne({ where: { id } })
+  async findOne(id: number): Promise<AssignmentPermission> {
+    const assignmentPermission: AssignmentPermission | null =
+      await this.assignmentPermissionRepository.findOne({
+        where: { id },
+        relations: { assignment: true, permission: true },
+        select: {
+          id: true,
+          assignment: { id: true, name: true },
+          permission: { id: true, name: true }
+        }
+      })
+    if (assignmentPermission) {
+      return assignmentPermission
+    }
+    throw new NotFoundException('Assignment Permission not found')
   }
 
   update(

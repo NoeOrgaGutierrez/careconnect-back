@@ -1,8 +1,15 @@
 import { Association } from 'src/resources/association/entities/association.entity'
 import { User } from 'src/resources/user/entities/user.entity'
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity()
+@Index(['user', 'association'], { unique: true })
 export class UserAssociation {
   @PrimaryGeneratedColumn()
   id: number

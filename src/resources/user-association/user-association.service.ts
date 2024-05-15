@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateUserAssociationDto } from './dto/create-user-association.dto'
 import { UpdateUserAssociationDto } from './dto/update-user-association.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -19,58 +19,66 @@ export class UserAssociationService {
   }
 
   async findAll(): Promise<UserAssociation[]> {
-    return await this.userAssociationRepository.find({
-      relations: {
-        user: true,
-        association: true
-      },
-      select: {
-        user: {
-          id: true,
-          email: false,
-          name: false,
-          password: false,
-          surname: false
+    const userAssociations: UserAssociation[] =
+      await this.userAssociationRepository.find({
+        relations: {
+          user: true,
+          association: true
         },
-        association: {
-          id: true,
-          name: false,
-          banner: false,
-          description: false,
-          logo: false,
-          miniDescription: false
+        select: {
+          user: {
+            id: true,
+            email: false,
+            name: false,
+            password: false,
+            surname: false
+          },
+          association: {
+            id: true,
+            name: false,
+            banner: false,
+            description: false,
+            logo: false,
+            miniDescription: false
+          }
         }
-      }
-    })
+      })
+    if (userAssociations.length > 0) {
+      return userAssociations
+    }
+    throw new NotFoundException('UserAssociations not found')
   }
 
-  async findOne(id: number): Promise<UserAssociation | null> {
-    const result = await this.userAssociationRepository.findOne({
-      where: { id },
-      relations: {
-        user: true,
-        association: true
-      },
-      select: {
-        user: {
-          id: true,
-          email: true,
-          name: true,
-          password: false,
-          surname: true
+  async findOne(id: number): Promise<UserAssociation> {
+    const userAssociation: UserAssociation | null =
+      await this.userAssociationRepository.findOne({
+        where: { id },
+        relations: {
+          user: true,
+          association: true
         },
-        association: {
+        select: {
           id: true,
-          name: true,
-          banner: true,
-          description: true,
-          logo: true,
-          miniDescription: true
+          user: {
+            id: true,
+            email: true,
+            name: true,
+            surname: true
+          },
+          association: {
+            id: true,
+            name: true,
+            banner: true,
+            description: true,
+            logo: true,
+            miniDescription: true
+          }
         }
-      }
-    })
-    console.log(result)
-    return result
+      })
+    if (userAssociation) {
+      return userAssociation
+    }
+    throw new NotFoundException('UserAssociation not found')
   }
 
   update(

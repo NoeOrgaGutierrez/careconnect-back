@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateTopicDto } from './dto/create-topic.dto'
 import { UpdateTopicDto } from './dto/update-topic.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -15,8 +15,8 @@ export class TopicService {
     return this.topicRepository.save(newTopic)
   }
 
-  findAll(): Promise<Topic[]> {
-    return this.topicRepository.find({
+  async findAll(): Promise<Topic[]> {
+    const topics: Topic[] = await this.topicRepository.find({
       relations: {
         user: true
       },
@@ -29,10 +29,14 @@ export class TopicService {
         description: true
       }
     })
+    if (topics.length > 0) {
+      return topics
+    }
+    throw new NotFoundException('Topics not found')
   }
 
-  findOne(id: number): Promise<Topic | null> {
-    return this.topicRepository.findOne({
+  async findOne(id: number): Promise<Topic> {
+    const topic: Topic | null = await this.topicRepository.findOne({
       where: { id },
       relations: {
         user: true
@@ -46,6 +50,10 @@ export class TopicService {
         description: true
       }
     })
+    if (topic) {
+      return topic
+    }
+    throw new NotFoundException('Topic not found')
   }
 
   update(id: number, updateTopicDto: UpdateTopicDto): Promise<UpdateResult> {

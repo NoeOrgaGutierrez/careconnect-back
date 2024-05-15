@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreatePublicationDto } from './dto/create-publication.dto'
 import { UpdatePublicationDto } from './dto/update-publication.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -16,8 +16,8 @@ export class PublicationService {
     return this.publicationRepository.save(newPublicattion)
   }
 
-  findAll(): Promise<Publication[]> {
-    return this.publicationRepository.find({
+  async findAll(): Promise<Publication[]> {
+    const publications: Publication[] = await this.publicationRepository.find({
       relations: {
         user: true,
         topic: true
@@ -31,24 +31,33 @@ export class PublicationService {
         }
       }
     })
+    if (publications.length > 0) {
+      return publications
+    }
+    throw new NotFoundException('Publications not found')
   }
 
-  findOne(id: number): Promise<Publication | null> {
-    return this.publicationRepository.findOne({
-      where: { id },
-      relations: {
-        user: true,
-        topic: true
-      },
-      select: {
-        user: {
-          id: true
+  async findOne(id: number): Promise<Publication> {
+    const publication: Publication | null =
+      await this.publicationRepository.findOne({
+        where: { id },
+        relations: {
+          user: true,
+          topic: true
         },
-        topic: {
-          id: true
+        select: {
+          user: {
+            id: true
+          },
+          topic: {
+            id: true
+          }
         }
-      }
-    })
+      })
+    if (publication) {
+      return publication
+    }
+    throw new NotFoundException('Publication not found')
   }
 
   update(

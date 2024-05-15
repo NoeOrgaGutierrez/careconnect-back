@@ -15,6 +15,8 @@ import { MemberEventModule } from './resources/member-event/member-event.module'
 import { UserAssociationModule } from './resources/user-association/user-association.module'
 import { MemberAssignmentModule } from './resources/member-assignment/member-assignment.module'
 import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module'
+import { BlogModule } from './resources/blog/blog.module'
+import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
 
 @Module({
   imports: [
@@ -31,7 +33,9 @@ import { AssignmentPermissionModule } from './resources/assignment-permission/as
     AssignmentModule,
     MemberAssignmentModule,
     ConfigModule.forRoot({}),
-    AssignmentPermissionModule
+    AssignmentPermissionModule,
+    BlogModule,
+    BlogCommentModule
   ],
   controllers: [AppController],
   providers: [AppService]

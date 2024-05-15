@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { UpdateCommentDto } from './dto/update-comment.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -14,8 +14,8 @@ export class CommentService {
     return this.commentRepository.save(newComment)
   }
 
-  findAll(): Promise<Comment[]> {
-    return this.commentRepository.find({
+  async findAll(): Promise<Comment[]> {
+    const comments: Comment[] = await this.commentRepository.find({
       relations: {
         user: true,
         publication: true
@@ -29,10 +29,14 @@ export class CommentService {
         }
       }
     })
+    if (comments.length > 0) {
+      return comments
+    }
+    throw new NotFoundException('Comments not found')
   }
 
-  findOne(id: number): Promise<Comment | null> {
-    return this.commentRepository.findOne({
+  async findOne(id: number): Promise<Comment> {
+    const comment: Comment | null = await this.commentRepository.findOne({
       where: { id },
       relations: {
         user: true,
@@ -47,6 +51,10 @@ export class CommentService {
         }
       }
     })
+    if (comment) {
+      return comment
+    }
+    throw new NotFoundException('Comment not found')
   }
 
   update(

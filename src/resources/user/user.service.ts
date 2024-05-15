@@ -31,11 +31,15 @@ export class UserService {
     return this.userRepository.save(newUser)
   }
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find()
+  async findAll(): Promise<User[]> {
+    const users: User[] = await this.userRepository.find()
+    if (users.length > 0) {
+      return users
+    }
+    throw new NotFoundException('Users not found')
   }
 
-  async findOne(id: number): Promise<User | null> {
+  async findOne(id: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } })
     if (user) {
       return user

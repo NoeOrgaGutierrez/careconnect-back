@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateAssignmentDto } from './dto/create-assignment.dto'
 import { UpdateAssignmentDto } from './dto/update-assignment.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -15,12 +15,23 @@ export class AssignmentService {
     return this.assignmentRepository.save(newAssignment)
   }
 
-  findAll(): Promise<Assignment[]> {
-    return this.assignmentRepository.find()
+  async findAll(): Promise<Assignment[]> {
+    const assignments: Assignment[] = await this.assignmentRepository.find()
+    if (assignments.length > 0) {
+      return assignments
+    }
+    throw new NotFoundException('Assignments not found')
   }
 
-  findOne(id: number): Promise<Assignment | null> {
-    return this.assignmentRepository.findOne({ where: { id } })
+  async findOne(id: number): Promise<Assignment> {
+    const assignment: Assignment | null =
+      await this.assignmentRepository.findOne({
+        where: { id }
+      })
+    if (assignment) {
+      return assignment
+    }
+    throw new NotFoundException('Assignment not found')
   }
 
   update(

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateAssociationDto } from './dto/create-association.dto'
 import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
@@ -17,12 +17,23 @@ export class AssociationService {
       this.associationRepository.create(createAssociationDto)
     return this.associationRepository.save(newAssociation)
   }
-  findAll(): Promise<Association[]> {
-    return this.associationRepository.find()
+  async findAll(): Promise<Association[]> {
+    const associations: Association[] = await this.associationRepository.find()
+    if (associations.length > 0) {
+      return associations
+    }
+    throw new NotFoundException('Associations not found')
   }
 
-  findOne(id: number): Promise<Association | null> {
-    return this.associationRepository.findOne({ where: { id } })
+  async findOne(id: number): Promise<Association> {
+    const association: Association | null =
+      await this.associationRepository.findOne({
+        where: { id }
+      })
+    if (association) {
+      return association
+    }
+    throw new NotFoundException('Association not found')
   }
 
   update(
@@ -35,7 +46,7 @@ export class AssociationService {
   remove(id: number): Promise<DeleteResult> {
     return this.associationRepository.delete(id)
   }
-  async login(association: LoginAssociationDto): Promise<Association | null> {
+  async login(association: LoginAssociationDto): Promise<Association> {
     const associationInDb = await this.associationRepository.findOne({
       where: { name: association.loginCode }
     })
@@ -48,6 +59,6 @@ export class AssociationService {
         return associationInDb
       }
     }
-    return null
+    throw new NotFoundException('Invalid credentials')
   }
 }

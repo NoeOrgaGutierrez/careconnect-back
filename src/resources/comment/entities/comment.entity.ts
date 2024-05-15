@@ -21,7 +21,7 @@ export class Comment {
   @Column({ length: 500 })
   content: string
   @Column()
-  created_at: Date
-  @Column()
-  updated_at: Date
+  created: Date
+  @Column({ nullable: true })
+  updated: Date
 }
