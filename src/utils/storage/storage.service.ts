@@ -6,10 +6,10 @@ export class StorageService {
   constructor() {
     this.storage = new Storage({ projectId: process.env.PROJECT_ID })
   }
-  async uploadFile(): Promise<void> {
+  async uploadFile(file: string): Promise<void> {
     await this.storage
       .bucket(process.env.BUCKET_NAME || 'bucket_id')
-      .upload('borrar-fondo-imagen-1.webp', {
+      .upload(file, {
         destination: 'users/noe.webp'
       })
   }
