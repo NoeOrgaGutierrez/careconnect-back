@@ -17,6 +17,7 @@ import { MemberAssignmentModule } from './resources/member-assignment/member-ass
 import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module'
 import { BlogModule } from './resources/blog/blog.module'
 import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
+import { StorageModule } from './utils/storage/storage.module'
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
     ConfigModule.forRoot({}),
     AssignmentPermissionModule,
     BlogModule,
-    BlogCommentModule
+    BlogCommentModule,
+    StorageModule
   ],
   controllers: [AppController],
   providers: [AppService]
