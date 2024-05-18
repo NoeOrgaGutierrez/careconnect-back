@@ -36,6 +36,11 @@ export class UserAssociationController {
   findOne(@Param('id') id: string): Promise<UserAssociation | null> {
     return this.userAssociationService.findOne(+id)
   }
+  @ApiOperation({ summary: 'Get all associations of a member' })
+  @Get('user/:id')
+  findJoinedAssociations(@Param('id') id: string): Promise<UserAssociation[]> {
+    return this.userAssociationService.findJoinedAssociations(+id)
+  }
   @ApiOperation({ summary: 'Update a member of an association' })
   @Patch(':id')
   update(
