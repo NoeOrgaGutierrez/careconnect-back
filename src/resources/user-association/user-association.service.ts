@@ -114,4 +114,13 @@ export class UserAssociationService {
   remove(id: number): Promise<DeleteResult> {
     return this.userAssociationRepository.delete(id)
   }
+  removeByBothIds(
+    userId: number,
+    associationId: number
+  ): Promise<DeleteResult> {
+    return this.userAssociationRepository.delete({
+      user: { id: userId },
+      association: { id: associationId }
+    })
+  }
 }

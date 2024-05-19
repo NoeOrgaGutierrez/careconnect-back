@@ -54,4 +54,12 @@ export class UserAssociationController {
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userAssociationService.remove(+id)
   }
+  @ApiOperation({ summary: 'Delete a member onf an assocaition by both ids' })
+  @Delete('user/:userId/association/:associationId')
+  removeByBothIds(
+    @Param('userId') userId: number,
+    @Param('associationId') associationId: number
+  ): Promise<DeleteResult> {
+    return this.userAssociationService.removeByBothIds(userId, associationId)
+  }
 }
