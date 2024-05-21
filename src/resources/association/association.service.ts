@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { CreateAssociationDto } from './dto/create-association.dto'
 import { UpdateAssociationDto } from './dto/update-association.dto'
 import { Association } from './entities/association.entity'
@@ -12,9 +17,22 @@ export class AssociationService {
     @Inject('ASSOCIATION_REPOSITORY')
     private readonly associationRepository: Repository<Association>
   ) {}
-  create(createAssociationDto: CreateAssociationDto): Promise<Association> {
+  async create(
+    createAssociationDto: CreateAssociationDto
+  ): Promise<Association> {
+    const existingAssociation = await this.associationRepository.findOne({
+      where: { loginCode: createAssociationDto.loginCode }
+    })
+    if (existingAssociation) {
+      throw new ForbiddenException('Login code already exists')
+    }
     const newAssociation: Association =
       this.associationRepository.create(createAssociationDto)
+    const saltOrRounds = 10
+    newAssociation.password = await bcrypt.hash(
+      newAssociation.password,
+      saltOrRounds
+    )
     return this.associationRepository.save(newAssociation)
   }
   async findAll(): Promise<Association[]> {
@@ -35,6 +53,38 @@ export class AssociationService {
     }
     throw new NotFoundException('Association not found')
   }
+  async filter(
+    associationName: string,
+    blogName: string,
+    memberCount: number
+  ): Promise<Association[]> {
+    const query = this.associationRepository.createQueryBuilder('association')
+
+    if (associationName) {
+      query.orWhere('UPPER(association.name) like UPPER(:name)', {
+        name: '%' + associationName + '%'
+      })
+    }
+    if (blogName) {
+      query.leftJoinAndSelect('association.blogs', 'blog')
+      query.orWhere('UPPER(blog.name) like UPPER(:blogName)', {
+        blogName: '%' + blogName + '%'
+      })
+    }
+    if (memberCount !== 0) {
+      query.leftJoin('association.members', 'member')
+      query.groupBy('association.id')
+      query.having('COUNT(member.id) >= :memberCount', {
+        memberCount: memberCount
+      })
+    }
+
+    const result = await query.getMany()
+    if (result.length > 0) {
+      return result
+    }
+    throw new NotFoundException('Associations not found')
+  }
 
   update(
     id: number,
@@ -48,7 +98,7 @@ export class AssociationService {
   }
   async login(association: LoginAssociationDto): Promise<Association> {
     const associationInDb = await this.associationRepository.findOne({
-      where: { name: association.loginCode }
+      where: { loginCode: association.loginCode }
     })
     if (associationInDb) {
       const isPasswordMatching = await bcrypt.compare(

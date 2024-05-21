@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Blog } from 'src/resources/blog/entities/blog.entity'
+import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class Association {
@@ -11,7 +13,7 @@ export class Association {
   @Column({ length: 50 })
   loginCode: string
 
-  @Column({ length: 25 })
+  @Column({ length: 100 })
   password: string
 
   @Column({ length: 500 })
@@ -25,4 +27,9 @@ export class Association {
 
   @Column({ length: 1000 })
   banner: string
+
+  @OneToMany(() => Blog, (blog) => blog.association)
+  blogs: Blog[]
+  @OneToMany(() => UserAssociation, (member) => member.association)
+  members: Blog[]
 }
