@@ -18,6 +18,7 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
+    createUserDto.email = createUserDto.email.toLowerCase()
     const existingUser = await this.userRepository.findOne({
       where: { email: createUserDto.email }
     })

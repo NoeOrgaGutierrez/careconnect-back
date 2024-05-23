@@ -18,7 +18,7 @@ import { AssignmentPermissionModule } from './resources/assignment-permission/as
 import { BlogModule } from './resources/blog/blog.module'
 import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
 import { StorageModule } from './utils/storage/storage.module'
-import { FaqModule } from './resources/faq/faq.module';
+import { FaqModule } from './resources/faq/faq.module'
 
 @Module({
   imports: [
