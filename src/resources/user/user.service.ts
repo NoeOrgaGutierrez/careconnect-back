@@ -28,7 +28,6 @@ export class UserService {
     const newUser: User = this.userRepository.create(createUserDto)
     const saltOrRounds = 10
     newUser.password = await bcrypt.hash(newUser.password, saltOrRounds)
-    console.log(newUser.password)
     return this.userRepository.save(newUser)
   }
 
