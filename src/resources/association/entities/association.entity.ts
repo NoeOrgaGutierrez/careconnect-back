@@ -1,4 +1,5 @@
 import { Blog } from 'src/resources/blog/entities/blog.entity'
+import { Faq } from 'src/resources/faq/entities/faq.entity'
 import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -30,7 +31,9 @@ export class Association {
 
   @OneToMany(() => UserAssociation, (member) => member.association)
   members: UserAssociation[]
-
+  // RELATIONS
   @OneToMany(() => Blog, (blog) => blog.association)
   blogs: Blog[]
+  @OneToMany(() => Faq, (faq) => faq.association)
+  faq: Faq[]
 }
