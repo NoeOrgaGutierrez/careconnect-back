@@ -1,4 +1,4 @@
-import { Association } from 'src/resources/association/entities/association.entity'
+import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
 import {
   Column,
   Entity,
@@ -11,9 +11,9 @@ import {
 export class Blog {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Association, (association) => association.blogs)
-  @JoinColumn({ name: 'association' })
-  association: Association
+  @ManyToOne(() => UserAssociation, (member) => member.id)
+  @JoinColumn({ name: 'member' })
+  member: UserAssociation
   @Column({ length: 50 })
   name: string
   @Column({ length: 100 })

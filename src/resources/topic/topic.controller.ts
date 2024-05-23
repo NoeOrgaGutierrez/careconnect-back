@@ -5,14 +5,15 @@ import {
   Body,
   Patch,
   Param,
-  Delete
+  Delete,
+  Query
 } from '@nestjs/common'
 import { TopicService } from './topic.service'
 import { CreateTopicDto } from './dto/create-topic.dto'
 import { UpdateTopicDto } from './dto/update-topic.dto'
 import { Topic } from './entities/topic.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 @ApiTags('Topic')
 @Controller('topic')
 export class TopicController {
@@ -28,9 +29,21 @@ export class TopicController {
     return this.topicService.findAll()
   }
   @ApiOperation({ summary: 'Get a topic' })
-  @Get(':id')
+  @Get('filter/:id')
   findOne(@Param('id') id: string): Promise<Topic | null> {
     return this.topicService.findOne(+id)
+  }
+  @ApiOperation({ summary: 'Get filtered topics' })
+  @ApiQuery({ name: 'topicName', required: false, type: String })
+  @ApiQuery({ name: 'publicationName', required: false, type: String })
+  @ApiQuery({ name: 'commentCount', required: false, type: Number })
+  @Get('filter')
+  filter(
+    @Query('topicName') topicName: string,
+    @Query('publicationName') publicationName: string,
+    @Query('commentCount') commentCount: string
+  ): Promise<Topic[]> {
+    return this.topicService.filter(topicName, publicationName, +commentCount)
   }
   @ApiOperation({ summary: 'Update a topic' })
   @Patch(':id')

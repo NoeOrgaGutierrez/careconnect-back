@@ -1,3 +1,4 @@
+import { Comment } from 'src/resources/comment/entities/comment.entity'
 import { Topic } from 'src/resources/topic/entities/topic.entity'
 import { User } from 'src/resources/user/entities/user.entity'
 import {
@@ -6,6 +7,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm'
 
@@ -24,4 +26,6 @@ export class Publication {
   name: string
   @Column()
   description: string
+  @OneToMany(() => Comment, (comment) => comment.publication)
+  comments: Comment[]
 }

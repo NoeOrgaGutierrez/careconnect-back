@@ -10,7 +10,7 @@ import { Association } from './entities/association.entity'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { LoginAssociationDto } from './dto/login-association.dto'
 import * as bcrypt from 'bcrypt'
-
+import { AssociationWithCount } from './dto/interfaces/association-with-count-dto'
 @Injectable()
 export class AssociationService {
   constructor(
@@ -43,19 +43,31 @@ export class AssociationService {
     throw new NotFoundException('Associations not found')
   }
 
-  async findOne(id: number): Promise<Association> {
-    const association: Association | null =
-      await this.associationRepository.findOne({
-        where: { id }
-      })
-    if (association) {
-      return association
+  async findOne(id: number): Promise<AssociationWithCount> {
+    const query = this.associationRepository
+      .createQueryBuilder('association')
+      .leftJoin('association.blogs', 'blog')
+      .leftJoin('association.members', 'member')
+      .addSelect(`COUNT(blog.id) AS blogCount`)
+      .addSelect(`COUNT(member.id) AS memberCount`)
+      .groupBy('association.id')
+      .where('association.id = :id', { id })
+    const rawResult = (await query.getRawOne()) as {
+      membercount: number
+      blogcount: number
     }
-    throw new NotFoundException('Association not found')
+    const association = await query.getOne()
+    if (!association) {
+      throw new NotFoundException('Association not found')
+    }
+    return {
+      ...association,
+      memberCount: rawResult.membercount,
+      blogCount: rawResult.blogcount
+    } as AssociationWithCount
   }
   async filter(
     associationName: string,
-    blogName: string,
     memberCount: number
   ): Promise<Association[]> {
     const query = this.associationRepository.createQueryBuilder('association')
@@ -64,11 +76,10 @@ export class AssociationService {
       query.orWhere('UPPER(association.name) like UPPER(:name)', {
         name: '%' + associationName + '%'
       })
-    }
-    if (blogName) {
-      query.leftJoinAndSelect('association.blogs', 'blog')
+      query.leftJoin('association.members', 'member')
+      query.leftJoin('member.blogs', 'blog')
       query.orWhere('UPPER(blog.name) like UPPER(:blogName)', {
-        blogName: '%' + blogName + '%'
+        blogName: '%' + associationName + '%'
       })
     }
     if (memberCount !== 0) {

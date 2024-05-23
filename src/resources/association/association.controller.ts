@@ -56,18 +56,12 @@ export class AssociationController {
   }
   @ApiOperation({ summary: 'Get filtered associations' })
   @ApiQuery({ name: 'associationName', required: false, type: String })
-  @ApiQuery({ name: 'associationBlog', required: false, type: String })
-  @ApiQuery({ name: 'memberCount', required: false, type: Number })
+  @ApiQuery({ name: 'memberCount', required: true, type: Number })
   @Get('filter')
   filter(
     @Query('associationName') associationName: string,
-    @Query('associationBlog') blogName: string,
     @Query('memberCount') memberCount: string
   ): Promise<Association[]> {
-    return this.associationService.filter(
-      associationName,
-      blogName,
-      +memberCount
-    )
+    return this.associationService.filter(associationName, +memberCount)
   }
 }
