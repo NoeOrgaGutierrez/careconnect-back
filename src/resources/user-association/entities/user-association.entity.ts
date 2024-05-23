@@ -1,12 +1,10 @@
 import { Association } from 'src/resources/association/entities/association.entity'
-import { Blog } from 'src/resources/blog/entities/blog.entity'
 import { User } from 'src/resources/user/entities/user.entity'
 import {
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm'
 
@@ -21,7 +19,4 @@ export class UserAssociation {
   @ManyToOne(() => Association, (association) => association.id)
   @JoinColumn({ name: 'association' })
   association: Association
-  // RELACIONES
-  @OneToMany(() => Blog, (blog) => blog.member)
-  blogs: Blog[]
 }

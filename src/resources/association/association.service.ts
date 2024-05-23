@@ -76,14 +76,13 @@ export class AssociationService {
       query.orWhere('UPPER(association.name) like UPPER(:name)', {
         name: '%' + associationName + '%'
       })
-      query.leftJoin('association.members', 'member')
-      query.leftJoin('member.blogs', 'blog')
+      query.leftJoinAndSelect('association.blogs', 'blog')
       query.orWhere('UPPER(blog.name) like UPPER(:blogName)', {
         blogName: '%' + associationName + '%'
       })
     }
+
     if (memberCount !== 0) {
-      query.leftJoin('association.members', 'member')
       query.groupBy('association.id')
       query.having('COUNT(member.id) >= :memberCount', {
         memberCount: memberCount

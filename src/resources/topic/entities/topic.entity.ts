@@ -24,5 +24,5 @@ export class Topic {
   description: string
   // RELACIONES
   @OneToMany(() => Publication, (publication) => publication.topic)
-  members: Publication[]
+  publications: Publication[]
 }

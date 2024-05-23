@@ -55,25 +55,19 @@ export class TopicService {
     }
     throw new NotFoundException('Topic not found')
   }
-  async filter(
-    topicName: string,
-    postName: string,
-    commentCount: number
-  ): Promise<Topic[]> {
+  async filter(topicName: string, commentCount: number): Promise<Topic[]> {
     const query = this.topicRepository.createQueryBuilder('topic')
     if (topicName) {
       query.orWhere('UPPER(topic.name) like UPPER(:topicName)', {
         topicName: '%' + topicName + '%'
       })
-    }
-    if (postName) {
-      query.leftJoin('topic.posts', 'post')
-      query.orWhere('UPPER(post.name) like UPPER(:postName)', {
-        postName: '%' + postName + '%'
+      query.leftJoin('topic.publications', 'publication')
+      query.orWhere('UPPER(publication.name) like UPPER(:postName)', {
+        postName: '%' + topicName + '%'
       })
     }
     if (commentCount !== 0) {
-      query.leftJoin('post.comments', 'comment')
+      query.leftJoin('publication.comments', 'comment')
       query.groupBy('topic.id')
       query.having('COUNT(comment.id) >= :commentCount', {
         commentCount: commentCount

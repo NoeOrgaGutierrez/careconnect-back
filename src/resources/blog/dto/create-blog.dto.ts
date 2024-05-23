@@ -1,7 +1,7 @@
-import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
+import { Association } from 'src/resources/association/entities/association.entity'
 
 export class CreateBlogDto {
   name: string
-  member: UserAssociation
+  association: Association
   description: string
 }
