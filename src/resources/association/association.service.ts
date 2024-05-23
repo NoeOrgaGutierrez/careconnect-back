@@ -87,6 +87,7 @@ export class AssociationService {
     }
 
     if (memberCount !== 0) {
+      query.leftJoin('association.members', 'member')
       query.groupBy('association.id')
       query.having('COUNT(member.id) >= :memberCount', {
         memberCount: memberCount
