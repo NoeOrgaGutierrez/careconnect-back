@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -72,8 +73,11 @@ export class AssociationService {
   }
   async filter(
     associationName: string,
-    memberCount: number
+    memberCount: string
   ): Promise<Association[]> {
+    if (isNaN(Number(memberCount))) {
+      throw new BadRequestException('memberCount must be a number')
+    }
     const query = this.associationRepository.createQueryBuilder('association')
 
     if (associationName) {
@@ -86,7 +90,7 @@ export class AssociationService {
       })
     }
 
-    if (memberCount !== 0) {
+    if (memberCount) {
       query.leftJoin('association.members', 'member')
       query.groupBy('association.id')
       query.having('COUNT(member.id) >= :memberCount', {
