@@ -75,7 +75,7 @@ export class AssociationService {
     associationName: string,
     memberCount: string
   ): Promise<Association[]> {
-    if (isNaN(Number(memberCount))) {
+    if (memberCount && isNaN(Number(memberCount))) {
       throw new BadRequestException('memberCount must be a number')
     }
     const query = this.associationRepository.createQueryBuilder('association')
