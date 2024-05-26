@@ -5,6 +5,5 @@ export class CreateUserDto {
   @IsEmail()
   email: string
   password: string
-  avatar: string
   bio: string
 }

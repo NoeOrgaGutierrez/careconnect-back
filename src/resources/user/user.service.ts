@@ -28,7 +28,12 @@ export class UserService {
     const newUser: User = this.userRepository.create(createUserDto)
     const saltOrRounds = 10
     newUser.password = await bcrypt.hash(newUser.password, saltOrRounds)
-    return this.userRepository.save(newUser)
+    const savedUser = await this.userRepository.save(newUser)
+    savedUser.avatar =
+      'https://storage.googleapis.com/careconnect-bucket-final/user/' +
+      savedUser.id
+    await this.userRepository.update(savedUser.id, savedUser)
+    return savedUser
   }
 
   async findAll(): Promise<User[]> {
