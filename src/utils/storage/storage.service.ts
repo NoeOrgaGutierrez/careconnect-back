@@ -18,9 +18,16 @@ export class StorageService {
     this.bucketName = process.env.BUCKET_ID || 'bucket-id'
   }
 
-  async uploadFile(file: Express.Multer.File): Promise<void> {
+  async uploadFile(
+    file: Express.Multer.File,
+    destinationPath: string,
+    newFileName: string
+  ): Promise<void> {
     const bucket = this.storage.bucket(this.bucketName)
-    const blob = bucket.file(file.originalname)
+
+    // Use the new file name provided
+    const blob = bucket.file(`${destinationPath}/${newFileName}`)
+
     const blobStream = blob.createWriteStream({
       resumable: false,
       metadata: {
@@ -46,7 +53,7 @@ export class StorageService {
         )
       })
 
-      // No es necesario agregar el manejador de 'close' a menos que queramos manejar específicamente el cierre prematuro
+      // 'end' event handler is not necessary unless you want to handle the premature closure specifically
       blobStream.on('end', () => {
         console.log('Stream ended')
       })

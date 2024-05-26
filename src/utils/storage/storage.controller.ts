@@ -1,4 +1,10 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import {
+  Controller,
+  Param,
+  Post,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { StorageService } from './storage.service'
 import { ApiConsumes, ApiBody } from '@nestjs/swagger'
@@ -7,7 +13,7 @@ import { ApiConsumes, ApiBody } from '@nestjs/swagger'
 export class StorageController {
   constructor(private readonly storageService: StorageService) {}
 
-  @Post('upload')
+  @Post('upload/:destinationPath/:newFileName')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -21,7 +27,13 @@ export class StorageController {
       }
     }
   })
-  async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<void> {
-    await this.storageService.uploadFile(file)
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('destinationPath') destinationPath: string,
+    @Param('newFileName') newFileName: string
+  ): Promise<void> {
+    console.log(destinationPath)
+    console.log(newFileName)
+    return this.storageService.uploadFile(file, destinationPath, newFileName)
   }
 }
