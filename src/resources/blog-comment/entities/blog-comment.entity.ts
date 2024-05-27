@@ -6,9 +6,9 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 export class BlogComment {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Blog, (blog) => blog.blogComments)
+  @ManyToOne(() => Blog, (blog) => blog.blogComments, { nullable: false })
   blog: Blog
-  @ManyToOne(() => UserAssociation, (member) => member.id)
+  @ManyToOne(() => UserAssociation, (member) => member.id, { nullable: false })
   member: UserAssociation
   @ManyToOne(() => BlogComment, (parentComment) => parentComment.id, {
     nullable: true
