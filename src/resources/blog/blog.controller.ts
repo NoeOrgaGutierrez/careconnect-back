@@ -40,4 +40,10 @@ export class BlogController {
   remove(@Param('id') id: string) {
     return this.blogService.remove(+id)
   }
+
+  @ApiOperation({ summary: 'Get blogs by association id' })
+  @Get('association/:id')
+  getBlogsByAssociationId(@Param('id') id: string) {
+    return this.blogService.getBlogsByAssociationId(+id)
+  }
 }

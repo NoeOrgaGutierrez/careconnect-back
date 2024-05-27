@@ -15,7 +15,6 @@ import { Association } from './entities/association.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { LoginAssociationDto } from './dto/login-association.dto'
-import { Blog } from '../blog/entities/blog.entity'
 @ApiTags('Association')
 @Controller('association')
 export class AssociationController {
@@ -64,10 +63,5 @@ export class AssociationController {
     @Query('memberCount') memberCount: string
   ): Promise<Association[]> {
     return this.associationService.filter(associationName, memberCount)
-  }
-  @ApiOperation({ summary: 'Get associations by blog' })
-  @Get('blog/:id')
-  getByBlog(@Param('id') id: string): Promise<Blog[]> {
-    return this.associationService.getBlogs(+id)
   }
 }

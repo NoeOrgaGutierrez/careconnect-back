@@ -11,7 +11,6 @@ import { Association } from './entities/association.entity'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { LoginAssociationDto } from './dto/login-association.dto'
 import * as bcrypt from 'bcrypt'
-import { Blog } from '../blog/entities/blog.entity'
 @Injectable()
 export class AssociationService {
   constructor(
@@ -119,18 +118,5 @@ export class AssociationService {
       }
     }
     throw new NotFoundException('Invalid credentials')
-  }
-  async getBlogs(id: number): Promise<Blog[]> {
-    const query = this.associationRepository
-      .createQueryBuilder('association')
-      .select(['blog.id', 'blog.name', 'blog.description'])
-      .innerJoin('association.blogs', 'blog')
-      .where('association.id = :id', { id })
-    const result: Blog[] = await query.getRawMany()
-    if (result.length > 0) {
-      return result
-    }
-
-    throw new NotFoundException('This association has no blogs')
   }
 }

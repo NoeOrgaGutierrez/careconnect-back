@@ -37,4 +37,12 @@ export class BlogService {
   remove(id: number): Promise<DeleteResult> {
     return this.blogRepository.delete(id)
   }
+  getBlogsByAssociationId(id: number): Promise<Blog[]> {
+    return this.blogRepository.find({
+      where: { association: { id: id } },
+      relations: {
+        blogComments: true
+      }
+    })
+  }
 }
