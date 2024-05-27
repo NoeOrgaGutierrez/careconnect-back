@@ -11,6 +11,7 @@ import { Association } from './entities/association.entity'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { LoginAssociationDto } from './dto/login-association.dto'
 import * as bcrypt from 'bcrypt'
+import { Blog } from '../blog/entities/blog.entity'
 @Injectable()
 export class AssociationService {
   constructor(
@@ -44,32 +45,21 @@ export class AssociationService {
   }
 
   async findOne(id: number): Promise<Association> {
-    const association = await this.associationRepository.findOne({
-      where: { id },
-      relations: {
-        blogs: true,
-        members: {
-          user: true
-        },
-        faq: true
-      },
-      select: {
-        members: {
-          id: true,
-          user: {
-            id: true,
-            email: true,
-            name: true,
-            surname: true,
-            password: false
-          }
+    const association: Association | null =
+      await this.associationRepository.findOne({
+        where: { id },
+        relations: {
+          faq: true,
+          members: {
+            user: true
+          },
+          blogs: true
         }
-      }
-    })
-    if (!association) {
-      throw new NotFoundException('Association not found')
+      })
+    if (association) {
+      return association
     }
-    return association
+    throw new NotFoundException(`Association with ID ${id} not found`)
   }
   async filter(
     associationName: string,
@@ -129,5 +119,18 @@ export class AssociationService {
       }
     }
     throw new NotFoundException('Invalid credentials')
+  }
+  async getBlogs(id: number): Promise<Blog[]> {
+    const query = this.associationRepository
+      .createQueryBuilder('association')
+      .select(['blog.id', 'blog.name', 'blog.description'])
+      .innerJoin('association.blogs', 'blog')
+      .where('association.id = :id', { id })
+    const result: Blog[] = await query.getRawMany()
+    if (result.length > 0) {
+      return result
+    }
+
+    throw new NotFoundException('This association has no blogs')
   }
 }

@@ -1,11 +1,5 @@
 import { Association } from 'src/resources/association/entities/association.entity'
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class Faq {
@@ -15,7 +9,7 @@ export class Faq {
   question: string
   @Column()
   response: string
+  // RELATIONS
   @ManyToOne(() => Association, (association) => association.id)
-  @JoinColumn({ name: 'association' })
   association: Association
 }

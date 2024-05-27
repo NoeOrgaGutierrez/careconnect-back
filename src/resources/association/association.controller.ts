@@ -33,7 +33,7 @@ export class AssociationController {
   }
   @ApiOperation({ summary: 'Get an association' })
   @Get('findOne/:id')
-  findOne(@Param('id') id: string): Promise<Association | null> {
+  findOne(@Param('id') id: string) {
     return this.associationService.findOne(+id)
   }
   @ApiOperation({ summary: 'Update an association' })

@@ -1,9 +1,9 @@
 import { Association } from 'src/resources/association/entities/association.entity'
 import { BlogComment } from 'src/resources/blog-comment/entities/blog-comment.entity'
+import { Pin } from 'src/resources/pin/entities/pin.entity'
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
@@ -14,7 +14,6 @@ export class Blog {
   @PrimaryGeneratedColumn()
   id: number
   @ManyToOne(() => Association, (association) => association.blogs)
-  @JoinColumn({ name: 'association' })
   association: Association
   @Column({ length: 50 })
   name: string
@@ -23,4 +22,6 @@ export class Blog {
   // RELATIONS
   @OneToMany(() => BlogComment, (blogComment) => blogComment.blog)
   blogComments: BlogComment[]
+  @OneToMany(() => Pin, (pin) => pin.blog)
+  pins: Pin[]
 }

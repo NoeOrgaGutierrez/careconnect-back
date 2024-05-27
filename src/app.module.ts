@@ -8,17 +8,14 @@ import { EventModule } from './resources/event/event.module'
 import { CommentModule } from './resources/comment/comment.module'
 import { TopicModule } from './resources/topic/topic.module'
 import { PublicationModule } from './resources/publication/publication.module'
-import { PermissionModule } from './resources/permission/permission.module'
-import { AssignmentModule } from './resources/assignment/assignment.module'
 import { ConfigModule } from '@nestjs/config'
 import { MemberEventModule } from './resources/member-event/member-event.module'
 import { UserAssociationModule } from './resources/user-association/user-association.module'
-import { MemberAssignmentModule } from './resources/member-assignment/member-assignment.module'
-import { AssignmentPermissionModule } from './resources/assignment-permission/assignment-permission.module'
 import { BlogModule } from './resources/blog/blog.module'
 import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
 import { StorageModule } from './utils/storage/storage.module'
 import { FaqModule } from './resources/faq/faq.module'
+import { PinModule } from './resources/pin/pin.module'
 
 @Module({
   imports: [
@@ -31,15 +28,12 @@ import { FaqModule } from './resources/faq/faq.module'
     TopicModule,
     CommentModule,
     PublicationModule,
-    PermissionModule,
-    AssignmentModule,
-    MemberAssignmentModule,
     ConfigModule.forRoot({}),
-    AssignmentPermissionModule,
     BlogModule,
     BlogCommentModule,
     StorageModule,
-    FaqModule
+    FaqModule,
+    PinModule
   ],
   controllers: [AppController],
   providers: [AppService]

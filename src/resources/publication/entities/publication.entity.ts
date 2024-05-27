@@ -5,7 +5,6 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
@@ -16,16 +15,15 @@ import {
 export class Publication {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Topic, (topic) => topic.id)
-  @JoinColumn({ name: 'topic' })
-  topic: Topic
-  @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'user' })
-  user: User
   @Column()
   name: string
   @Column()
   description: string
+  // RELATIONS
+  @ManyToOne(() => Topic, (topic) => topic.id)
+  topic: Topic
+  @ManyToOne(() => User, (user) => user.id)
+  user: User
   @OneToMany(() => Comment, (comment) => comment.publication)
   comments: Comment[]
 }

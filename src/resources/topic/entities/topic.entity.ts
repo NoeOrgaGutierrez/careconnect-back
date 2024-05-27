@@ -4,7 +4,6 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
@@ -15,9 +14,6 @@ export class Topic {
   // COLUMNAS DE BBDD
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'user' })
-  user: User
   @Column()
   name: string
   @Column()
@@ -25,4 +21,6 @@ export class Topic {
   // RELACIONES
   @OneToMany(() => Publication, (publication) => publication.topic)
   publications: Publication[]
+  @ManyToOne(() => User, (user) => user.id)
+  user: User
 }

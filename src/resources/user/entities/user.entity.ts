@@ -1,3 +1,4 @@
+import { Pin } from 'src/resources/pin/entities/pin.entity'
 import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -20,4 +21,6 @@ export class User {
   // RELATIONS
   @OneToMany(() => UserAssociation, (UserAssociation) => UserAssociation.user)
   userAssociations: UserAssociation[]
+  @OneToMany(() => Pin, (pin) => pin.user)
+  pins: Pin[]
 }
