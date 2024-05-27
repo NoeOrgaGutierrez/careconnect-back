@@ -10,6 +10,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { LoginUserDto } from './dto/login-user.dto'
+import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
 
 @Injectable()
 export class UserService {
@@ -74,5 +75,27 @@ export class UserService {
       }
     }
     throw new NotFoundException('User not found')
+  }
+  async getLatestComments(userId: number): Promise<BlogComment[]> {
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.userAssociations', 'userAssociation')
+      .innerJoin('userAssociation.association', 'association')
+      .innerJoin('association.blogs', 'blog')
+      .innerJoin('blog.blogComments', 'comment')
+      .select([
+        'comment.id',
+        'comment.content',
+        'comment.created',
+        'comment.updated'
+      ])
+      .where('user.id = :userId', { userId })
+      .orderBy('comment.created', 'DESC')
+
+    const result: BlogComment[] = await query.getRawMany()
+    if (result.length > 0) {
+      return result
+    }
+    throw new NotFoundException('Comments not found')
   }
 }

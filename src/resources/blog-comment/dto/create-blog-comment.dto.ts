@@ -7,5 +7,6 @@ export class CreateBlogCommentDto {
   member: UserAssociation
   parentComment: BlogComment
   content: string
-  date: Date
+  created: Date
+  updated: Date
 }

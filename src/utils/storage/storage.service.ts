@@ -40,7 +40,6 @@ export class StorageService {
         const publicUrl = format(
           `https://storage.googleapis.com/${bucket.name}/${blob.name}`
         )
-        console.log(`File uploaded to ${publicUrl}`)
         resolve()
       })
 
@@ -54,9 +53,7 @@ export class StorageService {
       })
 
       // 'end' event handler is not necessary unless you want to handle the premature closure specifically
-      blobStream.on('end', () => {
-        console.log('Stream ended')
-      })
+      blobStream.on('end', () => {})
 
       blobStream.end(file.buffer)
     })

@@ -32,8 +32,6 @@ export class StorageController {
     @Param('destinationPath') destinationPath: string,
     @Param('newFileName') newFileName: string
   ): Promise<void> {
-    console.log(destinationPath)
-    console.log(newFileName)
     return this.storageService.uploadFile(file, destinationPath, newFileName)
   }
 }

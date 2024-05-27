@@ -13,10 +13,10 @@ import {
 export class UserAssociation {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.userAssociations)
   @JoinColumn({ name: 'user' })
   user: User
-  @ManyToOne(() => Association, (association) => association.id)
+  @ManyToOne(() => Association, (association) => association.members)
   @JoinColumn({ name: 'association' })
   association: Association
 }

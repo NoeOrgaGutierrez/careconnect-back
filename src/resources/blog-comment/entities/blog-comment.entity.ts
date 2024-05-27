@@ -12,7 +12,7 @@ import {
 export class BlogComment {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Blog, (blog) => blog.id)
+  @ManyToOne(() => Blog, (blog) => blog.blogComments)
   @JoinColumn({ name: 'blog' })
   blog: Blog
   @ManyToOne(() => UserAssociation, (member) => member.id)

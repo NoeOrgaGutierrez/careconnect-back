@@ -14,6 +14,7 @@ import { User } from './entities/user.entity'
 import { DeleteResult, UpdateResult } from 'typeorm'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { LoginUserDto } from './dto/login-user.dto'
+import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -50,5 +51,10 @@ export class UserController {
   @Post('login')
   login(@Body() user: LoginUserDto): Promise<User | null> {
     return this.userService.login(user)
+  }
+  @ApiOperation({ summary: 'Get latest comments' })
+  @Get('latest-comments/:userId')
+  getLatestComments(@Param('userId') userId: number): Promise<BlogComment[]> {
+    return this.userService.getLatestComments(userId)
   }
 }

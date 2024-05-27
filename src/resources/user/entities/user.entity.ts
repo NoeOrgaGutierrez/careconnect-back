@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 export class User {
@@ -16,4 +17,7 @@ export class User {
   email: string
   @Column({ length: 100 })
   password: string
+  // RELATIONS
+  @OneToMany(() => UserAssociation, (UserAssociation) => UserAssociation.user)
+  userAssociations: UserAssociation[]
 }

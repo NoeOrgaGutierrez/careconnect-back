@@ -1,9 +1,11 @@
 import { Association } from 'src/resources/association/entities/association.entity'
+import { BlogComment } from 'src/resources/blog-comment/entities/blog-comment.entity'
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm'
 
@@ -18,4 +20,7 @@ export class Blog {
   name: string
   @Column({ length: 100 })
   description: string
+  // RELATIONS
+  @OneToMany(() => BlogComment, (blogComment) => blogComment.blog)
+  blogComments: BlogComment[]
 }
