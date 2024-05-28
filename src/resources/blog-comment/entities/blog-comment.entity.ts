@@ -1,11 +1,24 @@
 import { Blog } from 'src/resources/blog/entities/blog.entity'
 import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity()
 export class BlogComment {
   @PrimaryGeneratedColumn()
   id: number
+  @Column({ length: 250 })
+  content: string
+  @Column()
+  created: Date
+  @Column()
+  updated: Date
+  // RELATIONS
   @ManyToOne(() => Blog, (blog) => blog.blogComments, { nullable: false })
   blog: Blog
   @ManyToOne(() => UserAssociation, (member) => member.id, { nullable: false })
@@ -14,10 +27,6 @@ export class BlogComment {
     nullable: true
   })
   parentComment: BlogComment
-  @Column({ length: 250 })
-  content: string
-  @Column()
-  created: Date
-  @Column({ nullable: true })
-  updated: Date
+  @OneToMany(() => BlogComment, (blogComment) => blogComment.parentComment)
+  blogComments: BlogComment[]
 }

@@ -19,8 +19,8 @@ export class Topic {
   @Column()
   description: string
   // RELACIONES
+  @ManyToOne(() => User, (user) => user.id, { nullable: false })
+  user: User
   @OneToMany(() => Publication, (publication) => publication.topic)
   publications: Publication[]
-  @ManyToOne(() => User, (user) => user.id)
-  user: User
 }

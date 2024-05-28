@@ -8,8 +8,10 @@ export class UserAssociation {
   @PrimaryGeneratedColumn()
   id: number
   // RELATIONS
-  @ManyToOne(() => User, (user) => user.userAssociations)
+  @ManyToOne(() => User, (user) => user.userAssociations, { nullable: false })
   user: User
-  @ManyToOne(() => Association, (association) => association.members)
+  @ManyToOne(() => Association, (association) => association.members, {
+    nullable: false
+  })
   association: Association
 }

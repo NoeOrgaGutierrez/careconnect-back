@@ -6,14 +6,17 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Publication, (publication) => publication.id)
-  publication: Publication
-  @ManyToOne(() => User, (user) => user.id)
-  user: User
   @Column({ length: 500 })
   content: string
   @Column()
   created: Date
   @Column({ nullable: true })
   updated: Date
+  // RELATIONS
+  @ManyToOne(() => Publication, (publication) => publication.id, {
+    nullable: false
+  })
+  publication: Publication
+  @ManyToOne(() => User, (user) => user.id, { nullable: false })
+  user: User
 }

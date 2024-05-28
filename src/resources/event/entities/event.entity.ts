@@ -5,8 +5,6 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 export class Evento {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Association, (association) => association.id)
-  association: Association
   @Column()
   dateStart: Date
   @Column()
@@ -15,4 +13,9 @@ export class Evento {
   description: string
   @Column({ nullable: true, length: 1000 })
   banner: string
+  // RELATIONS
+  @ManyToOne(() => Association, (association) => association.id, {
+    nullable: false
+  })
+  association: Association
 }

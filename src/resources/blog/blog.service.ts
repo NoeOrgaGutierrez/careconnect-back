@@ -3,6 +3,7 @@ import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Blog } from './entities/blog.entity'
+import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
 
 @Injectable()
 export class BlogService {
@@ -44,5 +45,51 @@ export class BlogService {
         blogComments: true
       }
     })
+  }
+  async getBlogCommentsByBlogId(id: number): Promise<BlogComment[]> {
+    const blog = await this.blogRepository.findOne({
+      where: { id },
+      relations: [
+        'blogComments',
+        'blogComments.member',
+        'blogComments.member.user',
+        'blogComments.parentComment'
+      ]
+    })
+
+    if (!blog) {
+      throw new NotFoundException('Blog not found')
+    }
+
+    const comments = blog.blogComments
+
+    // Convert the flat array to a nested structure
+    const nestComments = (comments: BlogComment[]): BlogComment[] => {
+      const commentMap = new Map<number, BlogComment>()
+
+      // Initialize the map with all comments
+      comments.forEach((comment) => {
+        comment.blogComments = []
+        commentMap.set(comment.id, comment)
+      })
+
+      const nestedComments: BlogComment[] = []
+
+      // Process the comments to form the nested structure
+      comments.forEach((comment) => {
+        if (comment.parentComment) {
+          const parent = commentMap.get(comment.parentComment.id)
+          if (parent) {
+            parent.blogComments.push(comment)
+          }
+        } else {
+          nestedComments.push(comment)
+        }
+      })
+
+      return nestedComments
+    }
+
+    return nestComments(comments)
   }
 }

@@ -28,10 +28,9 @@ export class Association {
 
   @Column({ length: 1000 })
   banner: string
-
+  // RELATIONS
   @OneToMany(() => UserAssociation, (member) => member.association)
   members: UserAssociation[]
-  // RELATIONS
   @OneToMany(() => Blog, (blog) => blog.association)
   blogs: Blog[]
   @OneToMany(() => Faq, (faq) => faq.association)

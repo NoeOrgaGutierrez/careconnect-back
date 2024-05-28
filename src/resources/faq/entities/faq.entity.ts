@@ -10,6 +10,8 @@ export class Faq {
   @Column()
   response: string
   // RELATIONS
-  @ManyToOne(() => Association, (association) => association.id)
+  @ManyToOne(() => Association, (association) => association.id, {
+    nullable: false
+  })
   association: Association
 }

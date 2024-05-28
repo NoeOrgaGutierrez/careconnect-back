@@ -19,7 +19,9 @@ export class User {
   @Column({ length: 100 })
   password: string
   // RELATIONS
-  @OneToMany(() => UserAssociation, (UserAssociation) => UserAssociation.user)
+  @OneToMany(() => UserAssociation, (UserAssociation) => UserAssociation.user, {
+    nullable: false
+  })
   userAssociations: UserAssociation[]
   @OneToMany(() => Pin, (pin) => pin.user)
   pins: Pin[]

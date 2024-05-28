@@ -13,13 +13,16 @@ import {
 export class Blog {
   @PrimaryGeneratedColumn()
   id: number
-  @ManyToOne(() => Association, (association) => association.blogs)
-  association: Association
+
   @Column({ length: 50 })
   name: string
   @Column({ length: 100 })
   description: string
   // RELATIONS
+  @ManyToOne(() => Association, (association) => association.blogs, {
+    nullable: false
+  })
+  association: Association
   @OneToMany(() => BlogComment, (blogComment) => blogComment.blog)
   blogComments: BlogComment[]
   @OneToMany(() => Pin, (pin) => pin.blog)

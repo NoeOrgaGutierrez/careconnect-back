@@ -11,6 +11,8 @@ import { BlogService } from './blog.service'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
+import { Blog } from './entities/blog.entity'
 @ApiTags('Blog')
 @Controller('blog')
 export class BlogController {
@@ -43,7 +45,12 @@ export class BlogController {
 
   @ApiOperation({ summary: 'Get blogs by association id' })
   @Get('association/:id')
-  getBlogsByAssociationId(@Param('id') id: string) {
+  getBlogsByAssociationId(@Param('id') id: string): Promise<Blog[]> {
     return this.blogService.getBlogsByAssociationId(+id)
+  }
+  @ApiOperation({ summary: 'Get blog comments by blog ID' })
+  @Get('comments/:id')
+  getBlogCommentsByBlogId(@Param('id') id: string): Promise<BlogComment[]> {
+    return this.blogService.getBlogCommentsByBlogId(+id)
   }
 }

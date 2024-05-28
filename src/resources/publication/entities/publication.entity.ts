@@ -20,9 +20,9 @@ export class Publication {
   @Column()
   description: string
   // RELATIONS
-  @ManyToOne(() => Topic, (topic) => topic.id)
+  @ManyToOne(() => Topic, (topic) => topic.id, { nullable: false })
   topic: Topic
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, { nullable: false })
   user: User
   @OneToMany(() => Comment, (comment) => comment.publication)
   comments: Comment[]

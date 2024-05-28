@@ -10,10 +10,16 @@ export class BlogCommentService {
     @Inject('BLOG_COMMENT_REPOSITORY')
     private readonly blogCommentRepository: Repository<BlogComment>
   ) {}
-  create(createBlogCommentDto: CreateBlogCommentDto): Promise<BlogComment> {
+  async create(
+    createBlogCommentDto: CreateBlogCommentDto
+  ): Promise<BlogComment> {
     const newBlogComment: BlogComment =
       this.blogCommentRepository.create(createBlogCommentDto)
-    return this.blogCommentRepository.save(newBlogComment)
+    if (newBlogComment.created === undefined) {
+      newBlogComment.created = new Date(Date.now())
+      newBlogComment.updated = new Date(Date.now())
+    }
+    return await this.blogCommentRepository.save(newBlogComment)
   }
 
   async findAll(): Promise<BlogComment[]> {
