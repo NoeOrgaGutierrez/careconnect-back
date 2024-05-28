@@ -88,6 +88,7 @@ export class UserAssociationService {
         where: { user: { id } },
         relations: { association: true },
         select: {
+          id: true,
           association: {
             id: true,
             name: true,
