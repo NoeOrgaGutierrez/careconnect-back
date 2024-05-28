@@ -11,6 +11,7 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { LoginUserDto } from './dto/login-user.dto'
 import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
+import { Blog } from '../blog/entities/blog.entity'
 
 @Injectable()
 export class UserService {
@@ -97,5 +98,21 @@ export class UserService {
       return result
     }
     throw new NotFoundException('Comments not found')
+  }
+  async getPinnedBlogs(userId: number): Promise<Blog[]> {
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.userAssociations', 'userAssociation')
+      .innerJoin('userAssociation.association', 'association')
+      .innerJoinAndSelect('association.blogs', 'blog')
+      .innerJoin('blog.pins', 'pin')
+      .select(['blog.id', 'blog.name', 'blog.description'])
+      .where('user.id = :userId', { userId })
+
+    const result: Blog[] = await query.getRawMany()
+    if (result.length > 0) {
+      return result
+    }
+    throw new NotFoundException('Blogs not found')
   }
 }

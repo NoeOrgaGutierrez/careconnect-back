@@ -1,6 +1,13 @@
 import { Association } from 'src/resources/association/entities/association.entity'
+import { Pin } from 'src/resources/pin/entities/pin.entity'
 import { User } from 'src/resources/user/entities/user.entity'
-import { Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Entity,
+  Index,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity()
 @Index(['user', 'association'], { unique: true })
@@ -14,4 +21,6 @@ export class UserAssociation {
     nullable: false
   })
   association: Association
+  @OneToMany(() => Pin, (pin) => pin.member)
+  pin: Pin[]
 }

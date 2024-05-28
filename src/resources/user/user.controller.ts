@@ -15,6 +15,7 @@ import { DeleteResult, UpdateResult } from 'typeorm'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { LoginUserDto } from './dto/login-user.dto'
 import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
+import { Blog } from '../blog/entities/blog.entity'
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -56,5 +57,11 @@ export class UserController {
   @Get('latest-comments/:userId')
   getLatestComments(@Param('userId') userId: number): Promise<BlogComment[]> {
     return this.userService.getLatestComments(userId)
+  }
+  @ApiOperation({ summary: 'Get pinned blogs' })
+  @Get('pinned-blogs/:userId')
+  getPinnedBlogs(@Param('userId') userId: string): Promise<Blog[]> {
+    console.log(userId)
+    return this.userService.getPinnedBlogs(+userId)
   }
 }
