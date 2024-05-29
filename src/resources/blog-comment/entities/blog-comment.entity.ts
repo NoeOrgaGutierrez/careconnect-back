@@ -1,5 +1,6 @@
 import { Blog } from 'src/resources/blog/entities/blog.entity'
 import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
+import { Valoration } from 'src/resources/valoration/entities/valoration.entity'
 import {
   Column,
   Entity,
@@ -29,4 +30,6 @@ export class BlogComment {
   parentComment: BlogComment
   @OneToMany(() => BlogComment, (blogComment) => blogComment.parentComment)
   blogComments: BlogComment[]
+  @OneToMany(() => Valoration, (valoration) => valoration.blogComment)
+  valoration: Valoration[]
 }

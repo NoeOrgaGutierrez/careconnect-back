@@ -16,6 +16,7 @@ import { BlogCommentModule } from './resources/blog-comment/blog-comment.module'
 import { StorageModule } from './utils/storage/storage.module'
 import { FaqModule } from './resources/faq/faq.module'
 import { PinModule } from './resources/pin/pin.module'
+import { ValorationModule } from './resources/valoration/valoration.module'
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { PinModule } from './resources/pin/pin.module'
     BlogCommentModule,
     StorageModule,
     FaqModule,
-    PinModule
+    PinModule,
+    ValorationModule
   ],
   controllers: [AppController],
   providers: [AppService]

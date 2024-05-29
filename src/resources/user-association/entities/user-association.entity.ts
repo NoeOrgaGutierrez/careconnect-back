@@ -1,6 +1,7 @@
 import { Association } from 'src/resources/association/entities/association.entity'
 import { Pin } from 'src/resources/pin/entities/pin.entity'
 import { User } from 'src/resources/user/entities/user.entity'
+import { Valoration } from 'src/resources/valoration/entities/valoration.entity'
 import {
   Entity,
   Index,
@@ -23,4 +24,6 @@ export class UserAssociation {
   association: Association
   @OneToMany(() => Pin, (pin) => pin.member)
   pin: Pin[]
+  @OneToMany(() => Valoration, (valoration) => valoration.userAssociation)
+  valoration: Valoration[]
 }

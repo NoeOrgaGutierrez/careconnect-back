@@ -4,11 +4,14 @@ import { UpdateBlogDto } from './dto/update-blog.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { Blog } from './entities/blog.entity'
 import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
+import { Valoration } from '../valoration/entities/valoration.entity'
 
 @Injectable()
 export class BlogService {
   constructor(
-    @Inject('BLOG_REPOSITORY') private blogRepository: Repository<Blog>
+    @Inject('BLOG_REPOSITORY') private blogRepository: Repository<Blog>,
+    @Inject('VALORATION_REPOSITORY')
+    private valorationRepository: Repository<Valoration>
   ) {}
   create(createBlogDto: CreateBlogDto): Promise<Blog> {
     const newBlog = this.blogRepository.create(createBlogDto)
@@ -46,16 +49,24 @@ export class BlogService {
       }
     })
   }
-  async getBlogCommentsByBlogId(id: number): Promise<BlogComment[]> {
-    const blog = await this.blogRepository.findOne({
-      where: { id },
-      relations: [
-        'blogComments',
-        'blogComments.member',
-        'blogComments.member.user',
-        'blogComments.parentComment'
-      ]
-    })
+  async getBlogCommentsByBlogId(
+    id: number,
+    memberId: number
+  ): Promise<BlogComment[]> {
+    const blog = await this.blogRepository
+      .createQueryBuilder('blog')
+      .leftJoinAndSelect('blog.blogComments', 'blogComments')
+      .leftJoinAndSelect('blogComments.member', 'member')
+      .leftJoinAndSelect('member.user', 'user')
+      .leftJoinAndSelect('blogComments.parentComment', 'parentComment')
+      .leftJoinAndSelect(
+        'blogComments.valoration',
+        'valoration',
+        'valoration.userAssociation = :memberId'
+      )
+      .where('blog.id = :id', { id })
+      .setParameter('memberId', memberId)
+      .getOne()
 
     if (!blog) {
       throw new NotFoundException('Blog not found')
@@ -63,11 +74,9 @@ export class BlogService {
 
     const comments = blog.blogComments
 
-    // Convert the flat array to a nested structure
     const nestComments = (comments: BlogComment[]): BlogComment[] => {
       const commentMap = new Map<number, BlogComment>()
 
-      // Initialize the map with all comments
       comments.forEach((comment) => {
         comment.blogComments = []
         commentMap.set(comment.id, comment)
@@ -75,7 +84,6 @@ export class BlogService {
 
       const nestedComments: BlogComment[] = []
 
-      // Process the comments to form the nested structure
       comments.forEach((comment) => {
         if (comment.parentComment) {
           const parent = commentMap.get(comment.parentComment.id)

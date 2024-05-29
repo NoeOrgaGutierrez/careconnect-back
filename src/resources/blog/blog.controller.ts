@@ -49,8 +49,11 @@ export class BlogController {
     return this.blogService.getBlogsByAssociationId(+id)
   }
   @ApiOperation({ summary: 'Get blog comments by blog ID' })
-  @Get('comments/:id')
-  getBlogCommentsByBlogId(@Param('id') id: string): Promise<BlogComment[]> {
-    return this.blogService.getBlogCommentsByBlogId(+id)
+  @Get('comments/:id/:memberId')
+  getBlogCommentsByBlogId(
+    @Param('id') id: string,
+    @Param('memberId') memberId: string
+  ): Promise<BlogComment[]> {
+    return this.blogService.getBlogCommentsByBlogId(+id, +memberId)
   }
 }
