@@ -24,17 +24,17 @@ export class ValorationController {
   ): Promise<Valoration> {
     return this.valorationService.create(createValorationDto)
   }
-
+  @ApiOperation({ summary: 'Get all valorations' })
   @Get()
   findAll(): Promise<Valoration[]> {
     return this.valorationService.findAll()
   }
-
+  @ApiOperation({ summary: 'Get a valoration by ID' })
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Valoration> {
     return this.valorationService.findOne(+id)
   }
-
+  @ApiOperation({ summary: 'Update a valoration' })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -42,13 +42,14 @@ export class ValorationController {
   ): Promise<UpdateResult> {
     return this.valorationService.update(+id, updateValorationDto)
   }
-
+  @ApiOperation({ summary: 'Delete a valoration' })
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.valorationService.remove(+id)
   }
-  @Get('member/:id')
-  findByMember(@Param('id') id: string) {
+  @ApiOperation({ summary: 'Get all valoration by user' })
+  @Get('user/:id')
+  findByUser(@Param('id') id: string) {
     return this.valorationService.getValorationByUser(+id)
   }
 }
