@@ -47,4 +47,8 @@ export class ValorationController {
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.valorationService.remove(+id)
   }
+  @Get('member/:id')
+  findByMember(@Param('id') id: string) {
+    return this.valorationService.getValorationByUser(+id)
+  }
 }
