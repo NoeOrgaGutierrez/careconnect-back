@@ -4,12 +4,14 @@ import { Pin } from 'src/resources/pin/entities/pin.entity'
 import {
   Column,
   Entity,
+  Index,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm'
 
 @Entity()
+@Index(['name', 'association'], { unique: true })
 export class Blog {
   @PrimaryGeneratedColumn()
   id: number
