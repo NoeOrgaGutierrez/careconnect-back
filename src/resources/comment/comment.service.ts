@@ -9,9 +9,11 @@ export class CommentService {
   constructor(
     @Inject('COMMENT_REPOSITORY') private commentRepository: Repository<Comment>
   ) {}
-  create(createCommentDto: CreateCommentDto): Promise<Comment> {
+  async create(createCommentDto: CreateCommentDto): Promise<Comment> {
     const newComment = this.commentRepository.create(createCommentDto)
-    return this.commentRepository.save(newComment)
+    newComment.created = new Date(Date.now())
+    newComment.updated = new Date(Date.now())
+    return await this.commentRepository.save(newComment)
   }
 
   async findAll(): Promise<Comment[]> {
@@ -40,13 +42,17 @@ export class CommentService {
       where: { id },
       relations: {
         user: true,
-        publication: true
+        publication: true,
+        parentComment: true
       },
       select: {
         user: {
           id: true
         },
         publication: {
+          id: true
+        },
+        parentComment: {
           id: true
         }
       }
@@ -61,7 +67,7 @@ export class CommentService {
     id: number,
     updateCommentDto: UpdateCommentDto
   ): Promise<UpdateResult> {
-    updateCommentDto.updated_at = new Date(Date.now())
+    updateCommentDto.updated = new Date(Date.now())
     return this.commentRepository.update(id, updateCommentDto)
   }
 

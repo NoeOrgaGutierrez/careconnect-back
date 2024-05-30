@@ -1,5 +1,6 @@
 import { UserAssociation } from 'src/resources/user-association/entities/user-association.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Comment } from 'src/resources/comment/entities/comment.entity'
 
 @Entity()
 export class User {
@@ -22,4 +23,8 @@ export class User {
     nullable: false
   })
   userAssociations: UserAssociation[]
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    nullable: true
+  })
+  comments: Comment[]
 }

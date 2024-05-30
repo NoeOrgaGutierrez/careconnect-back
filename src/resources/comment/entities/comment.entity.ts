@@ -1,6 +1,13 @@
 import { Publication } from 'src/resources/publication/entities/publication.entity'
 import { User } from 'src/resources/user/entities/user.entity'
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Valoration } from 'src/resources/valoration/entities/valoration.entity'
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity()
 export class Comment {
@@ -10,7 +17,7 @@ export class Comment {
   content: string
   @Column()
   created: Date
-  @Column({ nullable: true })
+  @Column()
   updated: Date
   // RELATIONS
   @ManyToOne(() => Publication, (publication) => publication.id, {
@@ -19,4 +26,12 @@ export class Comment {
   publication: Publication
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   user: User
+  @ManyToOne(() => Comment, (parentComment) => parentComment.id, {
+    nullable: true
+  })
+  parentComment: Comment
+  @OneToMany(() => Comment, (comment) => comment.parentComment)
+  comments: Comment[]
+  @OneToMany(() => Valoration, (valoration) => valoration.blogComment)
+  valoration: Valoration[]
 }

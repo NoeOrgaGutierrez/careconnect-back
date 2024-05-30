@@ -64,6 +64,7 @@ export class BlogService {
         'valoration',
         'valoration.userAssociation = :memberId'
       )
+
       .where('blog.id = :id', { id })
       .setParameter('memberId', memberId)
       .getOne()

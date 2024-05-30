@@ -47,4 +47,14 @@ export class PublicationController {
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.publicationService.remove(+id)
   }
+  @ApiOperation({ summary: 'Get posts by topic ID' })
+  @Get('topic/:id')
+  getPostsByTopicId(@Param('id') id: string): Promise<Publication[]> {
+    return this.publicationService.getPostsByTopicId(+id)
+  }
+  @ApiOperation({ summary: 'Get comments by publication ID' })
+  @Get('comments/:id/:userId')
+  getCommentsByPublicationId(@Param('id') id: string) {
+    return this.publicationService.getPostCommentsByPublicationId(+id)
+  }
 }
