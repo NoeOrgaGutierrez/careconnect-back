@@ -25,10 +25,15 @@ export class PublicationService {
       },
       select: {
         user: {
-          id: true
+          id: true,
+          name: true,
+          surname: true,
+          avatar: true
         },
         topic: {
-          id: true
+          id: true,
+          name: true,
+          description: true
         }
       }
     })
