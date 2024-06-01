@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker buildx build \
+          docker build \
           --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
           --build-arg DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
           --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
