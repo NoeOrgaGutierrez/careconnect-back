@@ -10,6 +10,7 @@ COPY . .
 
 # Instala las dependencias
 RUN npm install
+RUN npm rebuild bcrypt --build-from-source
 
 # Copia todo el código fuente a /app
 COPY src ./src
