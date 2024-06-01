@@ -32,16 +32,17 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
-            --build-arg DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
-            --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
-            --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-            --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
-            --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
-            --build-arg GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
-            --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
-            . -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back
+          docker buildx build \
+          --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
+          --build-arg DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+          --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+          --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+          --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+          --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+          --build-arg GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
+          --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
+          --tag ${{ secrets.DOCKER_USERNAME }}/careconnect:back \
+          .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/careconnect:back
