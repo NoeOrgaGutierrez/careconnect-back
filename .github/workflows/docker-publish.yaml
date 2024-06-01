@@ -41,8 +41,7 @@ jobs:
           --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
           --build-arg GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
           --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
-          --tag ${{ secrets.DOCKER_USERNAME }}/careconnect:back \
-          .
+          . -t careconnect:back
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/careconnect:back
