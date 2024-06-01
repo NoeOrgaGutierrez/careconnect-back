@@ -31,9 +31,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build \
-          --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
-          . -t careconnect:back \
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/careconnect:back
