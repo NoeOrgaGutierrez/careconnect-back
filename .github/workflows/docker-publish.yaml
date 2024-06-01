@@ -24,11 +24,6 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Print Docker username and password
-        run: |
-          echo "Docker username: ${{ secrets.DOCKER_USERNAME }}"
-          echo "Docker password: ${{ secrets.DOCKER_PASSWORD }}"
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -36,18 +31,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        env:
-          BUCKET_ID: ${{ secrets.BUCKET_ID }}
-          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back .
+        run: |
+          docker build \
+            --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
+            --build-arg DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+            --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+            --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+            --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+            --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+            --build-arg GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
+            --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back .
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/careconnect:back
