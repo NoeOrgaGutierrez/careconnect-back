@@ -1,4 +1,3 @@
-# Usa una imagen de Node.js como base
 FROM node
 
 # Establece el directorio de trabajo en /app
