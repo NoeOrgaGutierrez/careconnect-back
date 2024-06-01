@@ -1,6 +1,5 @@
 FROM node
 
-# Establece el directorio de trabajo en /app
 WORKDIR /app
 
 # Copia el package.json y package-lock.json a /app
