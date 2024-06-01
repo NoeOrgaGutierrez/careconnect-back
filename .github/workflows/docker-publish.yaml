@@ -30,19 +30,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Create .env file
-        run: |
-          echo BUCKET_ID=${{ secrets.BUCKET_ID }} >> .env
-          echo DATABASE_HOST=${{ secrets.DATABASE_HOST }} >> .env
-          echo DATABASE_NAME=${{ secrets.DATABASE_NAME }} >> .env
-          echo DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} >> .env
-          echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> .env
-          echo DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} >> .env
-          echo GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} >> .env
-          echo PROJECT_ID=${{ secrets.PROJECT_ID }} >> .env
-
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back .
+        run: |
+          docker build \
+            --build-arg BUCKET_ID=${{ secrets.BUCKET_ID }} \
+            --build-arg DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+            --build-arg DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+            --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+            --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+            --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+            --build-arg GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
+            --build-arg PROJECT_ID=${{ secrets.PROJECT_ID }} \
+            . -t ${{ secrets.DOCKER_USERNAME }}/careconnect:back
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/careconnect:back
