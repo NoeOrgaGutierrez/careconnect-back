@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common'
 import { CreateTopicDto } from './dto/create-topic.dto'
 import { UpdateTopicDto } from './dto/update-topic.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
@@ -55,18 +60,22 @@ export class TopicService {
     }
     throw new NotFoundException('Topic not found')
   }
-  async filter(topicName: string, commentCount: number): Promise<Topic[]> {
-    const query = this.topicRepository.createQueryBuilder('topic')
+  async filter(topicName: string, commentCount: string): Promise<Topic[]> {
+    if (commentCount && isNaN(Number(commentCount))) {
+      throw new BadRequestException('memberCount must be a number')
+    }
+    const query = this.topicRepository
+      .createQueryBuilder('topic')
+      .leftJoin('topic.publications', 'publication')
     if (topicName) {
       query.orWhere('UPPER(topic.name) like UPPER(:topicName)', {
         topicName: '%' + topicName + '%'
       })
-      query.leftJoin('topic.publications', 'publication')
       query.orWhere('UPPER(publication.name) like UPPER(:postName)', {
         postName: '%' + topicName + '%'
       })
     }
-    if (commentCount !== 0) {
+    if (commentCount) {
       query.leftJoin('publication.comments', 'comment')
       query.groupBy('topic.id')
       query.having('COUNT(comment.id) >= :commentCount', {

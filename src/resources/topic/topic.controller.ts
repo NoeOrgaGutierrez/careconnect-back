@@ -35,13 +35,13 @@ export class TopicController {
   }
   @ApiOperation({ summary: 'Get filtered topics' })
   @ApiQuery({ name: 'topicName', required: false, type: String })
-  @ApiQuery({ name: 'commentCount', required: true, type: Number })
+  @ApiQuery({ name: 'commentCount', required: false, type: Number })
   @Get('filter')
   filter(
     @Query('topicName') topicName: string,
     @Query('commentCount') commentCount: string
   ): Promise<Topic[]> {
-    return this.topicService.filter(topicName, +commentCount)
+    return this.topicService.filter(topicName, commentCount)
   }
   @ApiOperation({ summary: 'Update a topic' })
   @Patch(':id')
