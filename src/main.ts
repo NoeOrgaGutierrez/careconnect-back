@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
-  app.enableCors()
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true
+  })
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('CareConnect API Service')
