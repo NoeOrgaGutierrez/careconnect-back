@@ -3,12 +3,21 @@ import { CreateUserAssociationDto } from './dto/create-user-association.dto'
 import { UpdateUserAssociationDto } from './dto/update-user-association.dto'
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { UserAssociation } from './entities/user-association.entity'
+import { BlogComment } from '../blog-comment/entities/blog-comment.entity'
+import { Valoration } from '../valoration/entities/valoration.entity'
+import { Pin } from '../pin/entities/pin.entity'
 
 @Injectable()
 export class UserAssociationService {
   constructor(
     @Inject('USER_ASSOCIATION_REPOSITORY')
-    private readonly userAssociationRepository: Repository<UserAssociation>
+    private readonly userAssociationRepository: Repository<UserAssociation>,
+    @Inject('BLOG_COMMENT_REPOSITORY')
+    private readonly blogCommentRepository: Repository<BlogComment>,
+    @Inject('VALORATION_REPOSITORY')
+    private readonly valorationRepository: Repository<Valoration>,
+    @Inject('PIN_REPOSITORY')
+    private readonly pinRepository: Repository<Pin>
   ) {}
   async create(
     createUserAssociationDto: CreateUserAssociationDto
@@ -115,13 +124,31 @@ export class UserAssociationService {
   remove(id: number): Promise<DeleteResult> {
     return this.userAssociationRepository.delete(id)
   }
-  removeByBothIds(
+  async removeByBothIds(
     userId: number,
     associationId: number
   ): Promise<DeleteResult> {
-    return this.userAssociationRepository.delete({
-      user: { id: userId },
-      association: { id: associationId }
-    })
+    const member: UserAssociation | null =
+      await this.userAssociationRepository.findOne({
+        where: { user: { id: userId }, association: { id: associationId } }
+      })
+    if (member) {
+      console.log('El miembro existe')
+      // Borro las valoraciones del miembro
+      await this.valorationRepository.delete({
+        userAssociation: { id: member.id }
+      })
+      console.log('Lo he borrado de valoration')
+      // Busco todos los comentarios que ha publicado el miembro
+      await this.blogCommentRepository.delete({
+        member: { id: member.id }
+      })
+      console.log('Lo he borrado de comentarios de blog')
+      await this.pinRepository.delete({ member: { id: member.id } })
+      console.log('Lo he borrado de los pines')
+      return this.userAssociationRepository.delete({ id: member.id })
+    } else {
+      throw new NotFoundException('Member not found')
+    }
   }
 }

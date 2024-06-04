@@ -1,6 +1,5 @@
 import { Publication } from 'src/resources/publication/entities/publication.entity'
 import { User } from 'src/resources/user/entities/user.entity'
-import { Valoration } from 'src/resources/valoration/entities/valoration.entity'
 import {
   Column,
   Entity,
@@ -13,25 +12,33 @@ import {
 export class Comment {
   @PrimaryGeneratedColumn()
   id: number
+
   @Column({ length: 500 })
   content: string
+
   @Column()
   created: Date
+
   @Column()
   updated: Date
+
   // RELATIONS
-  @ManyToOne(() => Publication, (publication) => publication.id, {
+  @ManyToOne(() => Publication, (publication) => publication.comments, {
     nullable: false
   })
   publication: Publication
+
   @ManyToOne(() => User, (user) => user.id, { nullable: false })
   user: User
-  @ManyToOne(() => Comment, (parentComment) => parentComment.id, {
-    nullable: true
+
+  @ManyToOne(() => Comment, (parentComment) => parentComment.comments, {
+    nullable: true,
+    onDelete: 'CASCADE'
   })
   parentComment: Comment
-  @OneToMany(() => Comment, (comment) => comment.parentComment)
+
+  @OneToMany(() => Comment, (comment) => comment.parentComment, {
+    cascade: ['insert', 'update', 'remove']
+  })
   comments: Comment[]
-  @OneToMany(() => Valoration, (valoration) => valoration.blogComment)
-  valoration: Valoration[]
 }

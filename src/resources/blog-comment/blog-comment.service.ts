@@ -91,4 +91,7 @@ export class BlogCommentService {
   remove(id: number): Promise<DeleteResult> {
     return this.blogCommentRepository.delete(id)
   }
+  removeByMemberId(memberId: number): Promise<DeleteResult> {
+    return this.blogCommentRepository.delete({ member: { id: memberId } })
+  }
 }

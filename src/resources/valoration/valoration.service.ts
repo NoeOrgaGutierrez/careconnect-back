@@ -86,4 +86,9 @@ export class ValorationService {
   remove(id: number): Promise<DeleteResult> {
     return this.valorationRepository.delete(id)
   }
+  removeByMemberId(memberId: number): Promise<DeleteResult> {
+    return this.valorationRepository.delete({
+      userAssociation: { id: memberId }
+    })
+  }
 }

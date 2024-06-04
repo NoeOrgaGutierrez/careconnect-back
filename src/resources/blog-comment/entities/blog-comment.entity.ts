@@ -13,23 +13,36 @@ import {
 export class BlogComment {
   @PrimaryGeneratedColumn()
   id: number
+
   @Column({ length: 250 })
   content: string
+
   @Column()
   created: Date
+
   @Column()
   updated: Date
+
   // RELATIONS
   @ManyToOne(() => Blog, (blog) => blog.blogComments, { nullable: false })
   blog: Blog
+
   @ManyToOne(() => UserAssociation, (member) => member.id, { nullable: false })
   member: UserAssociation
-  @ManyToOne(() => BlogComment, (parentComment) => parentComment.id, {
-    nullable: true
+
+  @ManyToOne(() => BlogComment, (parentComment) => parentComment.blogComments, {
+    nullable: true,
+    onDelete: 'CASCADE'
   })
   parentComment: BlogComment
-  @OneToMany(() => BlogComment, (blogComment) => blogComment.parentComment)
+
+  @OneToMany(() => BlogComment, (blogComment) => blogComment.parentComment, {
+    cascade: ['insert', 'update', 'remove']
+  })
   blogComments: BlogComment[]
-  @OneToMany(() => Valoration, (valoration) => valoration.blogComment)
+
+  @OneToMany(() => Valoration, (valoration) => valoration.blogComment, {
+    cascade: ['insert', 'update', 'remove']
+  })
   valoration: Valoration[]
 }
