@@ -7,12 +7,12 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { StorageService } from './storage.service'
-import { ApiConsumes, ApiBody } from '@nestjs/swagger'
-
+import { ApiConsumes, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger'
+@ApiTags('Storage')
 @Controller('storage')
 export class StorageController {
   constructor(private readonly storageService: StorageService) {}
-
+  @ApiOperation({ summary: 'Upload file' })
   @Post('upload/:destinationPath/:newFileName')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
