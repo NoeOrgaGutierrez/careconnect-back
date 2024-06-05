@@ -18,7 +18,7 @@ export class Blog {
 
   @Column({ length: 50 })
   name: string
-  @Column({ length: 100 })
+  @Column({ length: 1000 })
   description: string
   // RELATIONS
   @ManyToOne(() => Association, (association) => association.blogs, {
