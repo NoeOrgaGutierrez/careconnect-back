@@ -106,7 +106,7 @@ export class UserService {
       .innerJoin('userAssociation.association', 'association')
       .innerJoinAndSelect('association.blogs', 'blog')
       .innerJoin('blog.pins', 'pin')
-      .select(['blog.id', 'blog.name', 'blog.description'])
+      .select(['pin.id', 'blog.id', 'blog.name', 'blog.description'])
       .where('user.id = :userId', { userId })
 
     const result: Blog[] = await query.getRawMany()
