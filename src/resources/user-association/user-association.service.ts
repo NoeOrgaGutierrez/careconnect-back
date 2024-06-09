@@ -132,6 +132,7 @@ export class UserAssociationService {
       await this.userAssociationRepository.findOne({
         where: { user: { id: userId }, association: { id: associationId } }
       })
+    console.log(member)
     if (member) {
       console.log('El miembro existe')
       // Borro las valoraciones del miembro
@@ -140,6 +141,12 @@ export class UserAssociationService {
       })
       console.log('Lo he borrado de valoration')
       // Busco todos los comentarios que ha publicado el miembro
+      const comments = await this.blogCommentRepository.find({
+        where: { member: { id: member.id } }
+      })
+      comments.forEach((comment) => {
+        this.valorationRepository.delete({ blogComment: { id: comment.id } })
+      })
       await this.blogCommentRepository.delete({
         member: { id: member.id }
       })

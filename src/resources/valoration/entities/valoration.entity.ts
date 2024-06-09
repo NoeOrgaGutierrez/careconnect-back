@@ -25,7 +25,8 @@ export class Valoration {
   )
   userAssociation: UserAssociation
   @ManyToOne(() => BlogComment, (blogComment) => blogComment.valoration, {
-    nullable: false
+    nullable: false,
+    onDelete: 'CASCADE'
   })
   blogComment: BlogComment
 }
